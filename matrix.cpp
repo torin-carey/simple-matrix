@@ -133,13 +133,13 @@ Matrix& Matrix::operator/=(double a) {
 
 std::ostream& operator<<(std::ostream& out, const Matrix& a) {
 	for (uint i = 0; i < a.getM(); i++) {
-		out << "| ";
+		out << "|\t";
 		for (uint j = 0; j < a.getN(); j++) {
 			if (j)
 				out << '\t';
 			out << a.get(i, j);
 		}
-		out << " |" << std::endl;
+		out << "\t|" << std::endl;
 	}
 	return out;
 }
