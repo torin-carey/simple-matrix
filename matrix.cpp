@@ -50,6 +50,10 @@ void Matrix::set(uint i, uint j, double value) {
 	buf[index(i, j)] = value;
 }
 
+bool Matrix::isSquare() const {
+	return m == n;
+}
+
 Matrix Matrix::getRow(uint i) const {
 	Matrix a(1, n);
 	for (uint j = 0; j < n; j++)
@@ -66,7 +70,7 @@ Matrix Matrix::getCol(uint j) const {
 
 double Matrix::det() const {
 	// TODO Work on a better way to calculate determinantss
-	if (m != n)
+	if (!isSquare())
 		throw ERR_NOT_SQUARE;
 	if (m < 2)
 		throw ERR_INCOMPATIBLE_SIZE;
@@ -88,6 +92,22 @@ double Matrix::det() const {
 		alt *= -1;
 	}
 	return detsum;
+}
+
+Matrix Matrix::inverse() const {
+	// TODO Implement inverses for non 2x2
+	if (!isSquare())
+		throw ERR_NOT_SQUARE;
+	if (m != 2)
+		throw ERR_NOT_IMPL;
+	double deter = det();
+	Matrix m(2, 2);
+	m.set(0, 0, get(1, 1));
+	m.set(1, 1, get(0, 0));
+	m.set(0, 1, -get(0, 1));
+	m.set(1, 0, -get(1, 0));
+	m /= deter;
+	return m;
 }
 
 Matrix& Matrix::operator=(const Matrix& a) {
