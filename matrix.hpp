@@ -5,6 +5,7 @@
 
 #define ERR_INCOMPATIBLE_SIZE 1
 #define ERR_OUT_OF_BOUNDS 2
+#define ERR_NOT_SQUARE 3
 
 typedef unsigned int uint;
 

@@ -65,8 +65,29 @@ Matrix Matrix::getCol(uint j) const {
 }
 
 double Matrix::det() const {
-	// TODO Research computing permutations
-
+	// TODO Work on a better way to calculate determinantss
+	if (m != n)
+		throw ERR_NOT_SQUARE;
+	if (m < 2)
+		throw ERR_INCOMPATIBLE_SIZE;
+	if (m == 2)
+		return (get(0, 0) * get(1, 1)) - (get(0, 1) * get(1, 0));
+	Matrix mat(m - 1, m - 1);
+	double detsum = 0;
+	int alt = 1;
+	for (uint k = 0; k < m; k++) {
+		uint js = 0;
+		for (uint j = 0; j < m; j++) {
+			if (j == k)
+				continue;
+			for (uint i = 1; i < m; i++)
+				mat.set(i - 1, js, get(i, j));
+			js++;
+		}
+		detsum += mat.det() * get(0, k) * alt;
+		alt *= -1;
+	}
+	return detsum;
 }
 
 Matrix& Matrix::operator=(const Matrix& a) {
