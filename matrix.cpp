@@ -51,7 +51,7 @@ Matrix Matrix::getRow(uint i) const {
 	return a;
 }
 
-Matrix Matrix::getCol(int j) const {
+Matrix Matrix::getCol(uint j) const {
 	Matrix a(m, 1);
 	for (uint i = 0; i < m; i++)
 		a.set(i, j, get(i, j));
@@ -102,15 +102,54 @@ std::ostream& operator<<(std::ostream& out, const Matrix& a) {
 	for (uint i = 0; i < a.getM(); i++) {
 		out << "| ";
 		for (uint j = 0; j < a.getN(); j++) {
-			
+			if (j)
+				out << '\t';
+			out << a.get(i, j);
 		}
-		out << " |" << endl;
+		out << " |" << std::endl;
 	}
+	return out;
 }
-Matrix operator+(const Matrix&, const Matrix&);
-Matrix operator-(const Matrix&, const Matrix&);
-Matrix operator*(const Matrix&, double);
-Matrix operator*(double, const Matrix&);
-Matrix operator*(const Matrix&, const Matrix&);
-Matrix operator/(const Matrix&, double);
+
+Matrix operator+(const Matrix& a, const Matrix& b) {
+	Matrix m(a);
+	m += b;
+	return m;
+}
+
+Matrix operator-(const Matrix& a, const Matrix& b) {
+	Matrix m(a);
+	m -= b;
+	return m;
+}
+
+Matrix operator*(const Matrix& a, double b) {
+	Matrix m(a);
+	m *= b;
+	return m;
+}
+
+Matrix operator*(double a, const Matrix& b) {
+	return b * a;
+}
+
+Matrix operator*(const Matrix& a, const Matrix& b) {
+	if (a.getN() != b.getM())
+		throw ERR_INCOMPATIBLE_SIZE;
+	Matrix m(a.getM(), b.getN());
+	for (uint i = 0; i < a.getM(); i++)
+	for (uint j = 0; j < b.getN(); j++) {
+		double sum = 0;
+		for (uint k = 0; k < a.getN(); k++)
+			sum += a.get(i, k) * b.get(k, j);
+		m.set(i, j, sum);
+	}
+	return m;
+}
+
+Matrix operator/(const Matrix& a, double b) {
+	Matrix m(a);
+	m /= b;
+	return m;
+}
 

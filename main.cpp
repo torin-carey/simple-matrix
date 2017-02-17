@@ -1,8 +1,10 @@
 #include <iostream>
 
-#define p(m) std::cout << (m) << std::endl
+#define p(m) cout << (m) << endl
 
 #include "matrix.hpp"
+
+using namespace std;
 
 int main(void) {
 	Matrix m1(2, 3), m2(3, 2);
@@ -23,6 +25,12 @@ int main(void) {
 	p(m2);
 
 	p(m1 * m2);
+	try {
+		cout << "reverse" << endl;
+		p(m2 * m1);
+	} catch (int i) {
+		std::cout << (i == ERR_INCOMPATIBLE_SIZE) ? "Size" : "Not sure";
+	}
 
 	p(m1.getRow(0));
 	p(m2.getCol(0));
