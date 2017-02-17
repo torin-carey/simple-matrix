@@ -8,18 +8,20 @@ using namespace std;
 
 int main(void) {
 	try {
-		double val[] = {5, 1, 6, 8};
-		Matrix m(2, 2);
-		for (int i = 0; i < 4; i++)
-			m.set(i / 2, i % 2, val[i]);
+		int mi1[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+		int mi2[] = {1, 0, 0, 0, 1, 0, 0, 0, 1};
 		
-		p(m);
-		Matrix inv;
-		inv = m.inverse();
-		p(inv);
-		p(m * inv);
-		p(inv * m);
+		Matrix m1(3, 3, mi1), m2(3, 3, mi2);
+		p(m1);
+		p(m2);
+		
+		Matrix tmp;
+		tmp = m1.getCol(1);
+
+		m2.setCol(1, tmp);
+	
+		p(m2);
 	} catch (int i) {
-		cout << "Error code " << i << endl;
+		cout << "Error Code: " << i << endl;
 	}
 }

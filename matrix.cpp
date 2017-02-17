@@ -19,6 +19,22 @@ Matrix::Matrix(uint rows, uint cols) {
 	buf = new double[m * n];
 }
 
+Matrix::Matrix(uint rows, uint cols, double *values) {
+	m = rows;
+	n = cols;
+	buf = new double[m * n];
+	for (int k = 0; k < (m * n); k++)
+		buf[k] = values[k];
+}
+
+Matrix::Matrix(uint rows, uint cols, int *values) {
+	m = rows;
+	n = cols;
+	buf = new double[m * n];
+	for (int k = 0; k < (m * n); k++)
+		buf[k] = (double) values[k];
+}
+
 Matrix::Matrix(const Matrix& matrix) {
 	m = matrix.m;
 	n = matrix.n;
@@ -46,7 +62,7 @@ double Matrix::get(uint i, uint j) const {
 
 void Matrix::set(uint i, uint j, double value) {
 	if (i >= m || j >= n)
-		throw ERR_OUT_OF_BOUNDS;
+		throw ERR_OUT_OF_BOUNDS * 8;
 	buf[index(i, j)] = value;
 }
 
@@ -57,15 +73,29 @@ bool Matrix::isSquare() const {
 Matrix Matrix::getRow(uint i) const {
 	Matrix a(1, n);
 	for (uint j = 0; j < n; j++)
-		a.set(i, j, get(i, j));
+		a.set(0, j, get(i, j));
 	return a;
 }
 
 Matrix Matrix::getCol(uint j) const {
 	Matrix a(m, 1);
 	for (uint i = 0; i < m; i++)
-		a.set(i, j, get(i, j));
+		a.set(i, 0, get(i, j));
 	return a;
+}
+
+void Matrix::setRow(uint i, const Matrix& row) {
+	if (row.m != 1 || row.n != n)
+		throw ERR_INCOMPATIBLE_SIZE;
+	for (int j = 0; j < n; j++)
+		set(i, j, row.get(0, j));
+}
+
+void Matrix::setCol(uint j, const Matrix& col) {
+	if (col.n != 1 || col.m != m)
+		throw ERR_INCOMPATIBLE_SIZE;
+	for (int i = 0; i < m; i++)
+		set(i, j, col.get(i, 0));
 }
 
 double Matrix::det() const {

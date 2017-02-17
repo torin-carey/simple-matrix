@@ -17,6 +17,8 @@ private:
 public:
 	Matrix();
 	Matrix(uint rows, uint cols);
+	Matrix(uint rows, uint cols, double *values);
+	Matrix(uint rows, uint cols, int *values);
 	Matrix(const Matrix& matrix);
 	~Matrix();
 	uint getM() const;
@@ -26,6 +28,8 @@ public:
 	bool isSquare() const;
 	Matrix getRow(uint i) const;
 	Matrix getCol(uint j) const;
+	void setRow(uint i, const Matrix& row);
+	void setCol(uint j, const Matrix& col);
 	double det() const;
 	Matrix inverse() const;
 	Matrix& operator=(const Matrix&);
