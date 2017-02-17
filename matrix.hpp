@@ -13,6 +13,7 @@ private:
 	double *buf;
 	uint m, n;
 public:
+	Matrix();
 	Matrix(uint rows, uint cols);
 	Matrix(const Matrix& matrix);
 	~Matrix();

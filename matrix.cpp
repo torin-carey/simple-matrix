@@ -7,6 +7,12 @@
 #define check_size(mat) if (!((mat).m == m && (mat).n == n)) throw ERR_INCOMPATIBLE_SIZE
 #define for_ij(m, n) for (uint i = 0; i < (m); i++) for (uint j = 0; j < (n); j++)
 
+Matrix::Matrix() {
+	m = 0;
+	n = 0;
+	buf = nullptr;
+}
+
 Matrix::Matrix(uint rows, uint cols) {
 	m = rows;
 	n = cols;
@@ -60,10 +66,16 @@ Matrix Matrix::getCol(uint j) const {
 
 double Matrix::det() const {
 	// TODO Research computing permutations
+
 }
 
 Matrix& Matrix::operator=(const Matrix& a) {
-	check_size(a);
+	if (m == 0 || n == 0) {
+		m = a.getM();
+		n = a.getN();
+		buf = new double[m * n];
+	} else
+		check_size(a);
 	for_ij(m, n) set(i, j, a.get(i, j));
 	return *this;
 }
