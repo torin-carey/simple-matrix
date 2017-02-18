@@ -6,6 +6,7 @@
 #define ERR_INCOMPATIBLE_SIZE 1
 #define ERR_OUT_OF_BOUNDS 2
 #define ERR_NOT_SQUARE 3
+#define ERR_NOT_INVERTIBLE 4
 #define ERR_NOT_IMPL -1
 
 typedef unsigned int uint;
@@ -26,12 +27,19 @@ public:
 	double get(uint i, uint j) const;
 	void set(uint i, uint j, double value);
 	bool isSquare() const;
+	bool isInvertible() const;
 	Matrix getRow(uint i) const;
 	Matrix getCol(uint j) const;
 	void setRow(uint i, const Matrix& row);
 	void setCol(uint j, const Matrix& col);
 	double det() const;
-	Matrix inverse() const;
+	Matrix transpose() const;
+	Matrix adj() const;
+	double minordet(uint i, uint j) const;
+	double cofactor(uint i, uint j) const;
+	Matrix minorMatrix() const;
+	Matrix cofactorMatrix() const;
+	Matrix invert() const;
 	Matrix& operator=(const Matrix&);
 	Matrix operator-();
 	Matrix& operator+=(const Matrix&);

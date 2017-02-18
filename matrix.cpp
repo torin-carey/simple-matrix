@@ -71,6 +71,10 @@ bool Matrix::isSquare() const {
 	return m == n;
 }
 
+bool Matrix::isInvertible() const {
+	return det() != 0;
+}
+
 Matrix Matrix::getRow(uint i) const {
 	Matrix a(1, n);
 	for (uint j = 0; j < n; j++)
@@ -150,20 +154,82 @@ double Matrix::det() const {
 }
 #endif
 
-Matrix Matrix::inverse() const {
-	// TODO Implement inverses for non 2x2
+Matrix Matrix::transpose() const {
+	Matrix mat(n, m);
+	for_ij(m, n)
+		mat.set(j, i, get(i, j));
+	return mat;
+}
+
+Matrix Matrix::adj() const {
+	Matrix mat = cofactorMatrix().transpose();
+	return mat;
+}
+
+double Matrix::minordet(uint i, uint j) const {
 	if (!isSquare())
 		throw ERR_NOT_SQUARE;
-	if (m != 2)
-		throw ERR_NOT_IMPL;
+	if (m < 3)
+		throw ERR_INCOMPATIBLE_SIZE;
+	Matrix mat(m - 1, m - 1);
+	uint is = 0, js;
+	for (uint ip = 0; ip < m; ip++) {
+		if (ip == i)
+			continue;
+		js = 0;
+		for (uint jp = 0; jp < m; jp++) {
+			if (jp == j)
+				continue;
+			mat.set(is, js, get(ip, jp));
+			++js;
+		}
+		++is;
+	}
+	return mat.det();
+}
+
+double Matrix::cofactor(uint i, uint j) const {
+	double deter = minordet(i, j);
+	return ((i + j) % 2) ? -deter : deter;
+}
+
+Matrix Matrix::minorMatrix() const {
+	if (!isSquare())
+		throw ERR_NOT_SQUARE;
+	Matrix mat(m, m);
+	for (uint i = 0; i < m; i++)
+	for (uint j = 0; j < m; j++)
+		mat.set(i, j, minordet(i, j));
+	return mat;
+}
+
+Matrix Matrix::cofactorMatrix() const {
+	Matrix mat = minorMatrix();
+	int alt = 1;
+	for (uint k = 0; k < (m * n); k++) {
+		mat.buf[k] *= alt;
+		alt *= -1;
+	}
+	return mat;
+}
+
+Matrix Matrix::invert() const {
+	if (!isSquare())
+		throw ERR_NOT_SQUARE;
 	double deter = det();
-	Matrix m(2, 2);
-	m.set(0, 0, get(1, 1));
-	m.set(1, 1, get(0, 0));
-	m.set(0, 1, -get(0, 1));
-	m.set(1, 0, -get(1, 0));
-	m /= deter;
-	return m;
+	if (deter == 0)
+		throw ERR_NOT_INVERTIBLE;
+	Matrix mat;
+	if (m == 2) {
+		mat = Matrix(2, 2);
+		mat.set(0, 0, get(1, 1));
+		mat.set(1, 1, get(0, 0));
+		mat.set(0, 1, -get(0, 1));
+		mat.set(1, 0, -get(1, 0));
+	} else
+		mat = adj();
+	mat /= deter;
+	return mat;
 }
 
 Matrix& Matrix::operator=(const Matrix& a) {
@@ -208,12 +274,16 @@ Matrix& Matrix::operator/=(double a) {
 // END CLASS
 
 std::ostream& operator<<(std::ostream& out, const Matrix& a) {
+	double val;
 	for (uint i = 0; i < a.getM(); i++) {
 		out << "|\t";
 		for (uint j = 0; j < a.getN(); j++) {
 			if (j)
 				out << '\t';
-			out << a.get(i, j);
+			val = a.get(i, j);
+			if (abs(val) < 0.000000001)
+				val = 0;
+			out << val;
 		}
 		out << "\t|" << std::endl;
 	}
