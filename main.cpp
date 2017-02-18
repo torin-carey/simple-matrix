@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cstdio>
+#include <cmath>
 #include <unistd.h>
 
 #define p(m) cout << (m) << endl
@@ -63,9 +64,6 @@ int test_cofactor(void) {
 int test_inverse(void) {
 	int Ai[] = {3,2,0,0,0,1,2,-2,1};
 	Matrix A(3, 3, Ai);
-	Matrix inv = A.invert();;
-	p(A);
-	p(inv);
-	p(A*inv);
-	return 1;
+	Matrix inv = A.invert();
+	return A * inv == identity_matrix(3);
 }

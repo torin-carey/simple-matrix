@@ -1,6 +1,9 @@
 #include <iostream>
+#include <cmath>
 
 #include "matrix.hpp"
+
+#define EPSILON 0.0000000001
 
 // BEGIN CLASS
 
@@ -18,6 +21,8 @@ Matrix::Matrix(uint rows, uint cols) {
 	m = rows;
 	n = cols;
 	buf = new double[m * n];
+	for (uint k = 0; k < (m * n); k++)
+		buf[k] = 0;
 }
 
 Matrix::Matrix(uint rows, uint cols, double *values) {
@@ -252,19 +257,38 @@ Matrix Matrix::operator-() {
 Matrix& Matrix::operator+=(const Matrix& a) {
 	check_size(a);
 	for_ij(m, n) buf[index(i, j)] += a.buf[index(i, j)];
+	return *this;
 }
 
 Matrix& Matrix::operator-=(const Matrix& a) {
 	check_size(a);
 	for_ij(m, n) buf[index(i, j)] -= a.buf[index(i, j)];
+	return *this;
+}
+
+Matrix& Matrix::operator*=(const Matrix& a) {
+	Matrix res = a * *this;
+	*this = res;
+	return *this;
 }
 
 Matrix& Matrix::operator*=(double a) {
 	for_ij(m, n) buf[index(i, j)] *= a;
+	return *this;
 }
 
 Matrix& Matrix::operator/=(double a) {
 	for_ij(m, n) buf[index(i, j)] /= a;
+	return *this;
+}
+
+bool Matrix::operator==(const Matrix& a) {
+	if (a.m != m || a.n != n)
+		return false;
+	for (uint k = 0; k < (m * n); k++)
+		if (abs(a.buf[k] - buf[k]) > EPSILON)
+			return false;
+	return true;
 }
 
 #undef index
@@ -272,6 +296,13 @@ Matrix& Matrix::operator/=(double a) {
 #undef for_ij
 
 // END CLASS
+
+Matrix identity_matrix(uint m) {
+	Matrix mat(m, m);
+	for (uint k = 0; k < m; k++)
+		mat.set(k, k, 1);
+	return mat;
+}
 
 std::ostream& operator<<(std::ostream& out, const Matrix& a) {
 	double val;
@@ -281,7 +312,7 @@ std::ostream& operator<<(std::ostream& out, const Matrix& a) {
 			if (j)
 				out << '\t';
 			val = a.get(i, j);
-			if (abs(val) < 0.000000001)
+			if (std::abs(val) < EPSILON)
 				val = 0;
 			out << val;
 		}

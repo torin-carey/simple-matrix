@@ -44,9 +44,13 @@ public:
 	Matrix operator-();
 	Matrix& operator+=(const Matrix&);
 	Matrix& operator-=(const Matrix&);
+	Matrix& operator*=(const Matrix&);
 	Matrix& operator*=(double);
 	Matrix& operator/=(double);
+	bool operator==(const Matrix&);
 };
+
+Matrix identity_matrix(uint m);
 
 std::ostream& operator<<(std::ostream&, const Matrix&);
 Matrix operator+(const Matrix&, const Matrix&);
