@@ -3,6 +3,7 @@
 
 #include "matrix.hpp"
 
+// Error used for comparisons
 #define EPSILON 0.0000000001
 
 // BEGIN CLASS
