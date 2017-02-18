@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "matrix.hpp"
 
 // BEGIN CLASS
@@ -98,8 +99,32 @@ void Matrix::setCol(uint j, const Matrix& col) {
 		set(i, j, col.get(i, 0));
 }
 
+#ifndef DET_OLD
+#include "permutation.cpp"
 double Matrix::det() const {
-	// TODO Work on a better way to calculate determinantss
+	if (!isSquare())
+		throw ERR_NOT_SQUARE;
+	if (m < 2)
+		throw ERR_INCOMPATIBLE_SIZE;
+	if (m == 2) // Might as well speed things up
+		return (get(0, 0) * get(1, 1)) - (get(0, 1) * get(1, 0));
+	
+	uint p[n], v[n];
+	init_permute(n, p, v);
+	double detsum = 0, prod;
+	int sgn = 1;
+	do {
+		prod = 1;
+		for (uint i = 0; i < n; i++)
+			prod *= get(i, p[i]);
+		prod *= sgn;
+		sgn = -sgn;
+		detsum += prod;
+	} while (permute(n, p, v));
+	return detsum;
+}
+#else
+double Matrix::det() const {
 	if (!isSquare())
 		throw ERR_NOT_SQUARE;
 	if (m < 2)
@@ -123,6 +148,7 @@ double Matrix::det() const {
 	}
 	return detsum;
 }
+#endif
 
 Matrix Matrix::inverse() const {
 	// TODO Implement inverses for non 2x2

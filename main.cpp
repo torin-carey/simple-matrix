@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cstdio>
+#include <unistd.h>
 
 #define p(m) cout << (m) << endl
 
@@ -6,22 +8,21 @@
 
 using namespace std;
 
-int main(void) {
-	try {
-		int mi1[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-		int mi2[] = {1, 0, 0, 0, 1, 0, 0, 0, 1};
-		
-		Matrix m1(3, 3, mi1), m2(3, 3, mi2);
-		p(m1);
-		p(m2);
-		
-		Matrix tmp;
-		tmp = m1.getCol(1);
+void die(const string& msg) {
+	cerr << "Error: " << msg << endl;
+	exit(-1);
+}
 
-		m2.setCol(1, tmp);
-	
-		p(m2);
-	} catch (int i) {
-		cout << "Error Code: " << i << endl;
-	}
+int test_det(void);
+
+int main(void) {
+	if (!test_det())
+		die("Determinant test failed.");
+	puts("All tests passed!");
+}
+
+int test_det(void) {
+	int Ai[] = {3,1,4,5,0,2,0,0,2,0,6,2,-1,-2,-3,0};
+	Matrix A(4, 4, Ai);
+	return A.det() == 20;
 }
