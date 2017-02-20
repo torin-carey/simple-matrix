@@ -33,6 +33,11 @@ int main(void) {
 			die("Inverse test failed.");
 
 		puts("All tests passed!");
+		
+		int Ai[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+		Matrix A(3, 3, Ai);
+		p(A);
+		p(A.subMatrix(1, 2));
 
 	} catch (int i) {
 		cerr << "Error code: \033[1m" << i << "\033[0m" << endl;
@@ -65,5 +70,5 @@ int test_inverse(void) {
 	int Ai[] = {3,2,0,0,0,1,2,-2,1};
 	Matrix A(3, 3, Ai);
 	Matrix inv = A.invert();
-	return A * inv == identity_matrix(3);
+	return A * inv == identityMatrix(3);
 }

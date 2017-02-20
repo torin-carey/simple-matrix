@@ -1,5 +1,5 @@
-#ifndef HPP_MATRIX
-#define HPP_MATRIX
+#ifndef SIMPLE_MATRIX_MATRIX_H_
+#define SIMPLE_MATRIX_MATRIX_H_
 
 #include <iostream>
 
@@ -13,33 +13,98 @@ typedef unsigned int uint;
 
 class Matrix {
 private:
-	double *buf;
-	uint m, n;
+	// buf_ stores each term in the matrix
+	double *buf_;
+	// m_ and n_ store the number of rows
+	// and columns respectively.
+	uint m_, n_;
 public:
+	// Basic
+	// =====
+
+	// Default constructor
 	Matrix();
+
+	// Creates an empty matrix
 	Matrix(uint rows, uint cols);
+
+	// Creates a matrix and fills vertically with
+	// values from values
 	Matrix(uint rows, uint cols, double *values);
+
+	// Creates a matrix and fills vertically with
+	// integer values from values
 	Matrix(uint rows, uint cols, int *values);
-	Matrix(const Matrix& matrix);
+
+	// Copies another matrix
+	Matrix(const Matrix&);
+
 	~Matrix();
+
+	// Get number of rows
 	uint getM() const;
+
+	// Get number of columns
 	uint getN() const;
+
+	// Gets the M_ij element
 	double get(uint i, uint j) const;
+
+	// Sets the M_ij element
 	void set(uint i, uint j, double value);
+
+	// Returns true if matrix is a square matrix
 	bool isSquare() const;
+
+	// Returns true if matrix is invertible
+	// that is, M.det() != 0
 	bool isInvertible() const;
+
+	// Gets the ith row as a row vector
 	Matrix getRow(uint i) const;
+
+	// Gets the jth col as a column vector
 	Matrix getCol(uint j) const;
+
+	// Replaces ith row with a row vector
 	void setRow(uint i, const Matrix& row);
+
+	// Replaces jth col with a column vector
 	void setCol(uint j, const Matrix& col);
+
+	// Advanced
+	// ========
+
+	// Calculates determinant
 	double det() const;
+
+	// Transposes matrix
 	Matrix transpose() const;
+
+	// Adjugates matrix
 	Matrix adj() const;
+
+	// Creates a sub matrix, excluding row i and col j
+	Matrix subMatrix(uint i, uint j) const;
+
+	// Calculates minor M_ij
 	double minordet(uint i, uint j) const;
+
+	// Calculates cofactor C_ij
 	double cofactor(uint i, uint j) const;
+
+	// Creates a matrix of minors
 	Matrix minorMatrix() const;
+
+	// Creates a matrix of cofactors
 	Matrix cofactorMatrix() const;
+
+	// Inverts a square matrix
 	Matrix invert() const;
+
+	// Operator Overloads
+	// ==================
+
 	Matrix& operator=(const Matrix&);
 	Matrix operator-();
 	Matrix& operator+=(const Matrix&);
@@ -50,7 +115,8 @@ public:
 	bool operator==(const Matrix&);
 };
 
-Matrix identity_matrix(uint m);
+// Creates an identity matrix with the given size
+Matrix identityMatrix(uint m);
 
 std::ostream& operator<<(std::ostream&, const Matrix&);
 Matrix operator+(const Matrix&, const Matrix&);
@@ -60,4 +126,4 @@ Matrix operator*(double, const Matrix&);
 Matrix operator*(const Matrix&, const Matrix&);
 Matrix operator/(const Matrix&, double);
 
-#endif
+#endif // SIMPLE_MATRIX_MATRIX_H_
