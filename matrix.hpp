@@ -85,7 +85,7 @@ public:
 	Matrix adj() const;
 
 	// Creates a sub matrix, excluding row i and col j
-	Matrix subMatrix(uint i, uint j) const;
+	Matrix submatrix(uint i, uint j) const;
 
 	// Calculates minor M_ij
 	double minordet(uint i, uint j) const;

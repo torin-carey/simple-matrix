@@ -172,7 +172,7 @@ Matrix Matrix::adj() const {
 	return mat;
 }
 
-Matrix Matrix::subMatrix(uint i, uint j) const {
+Matrix Matrix::submatrix(uint i, uint j) const {
 	Matrix mat(m_ - 1, n_ - 1);
 	uint is = 0, js;
 	for (uint ip = 0; ip < m_; ip++) {
@@ -195,7 +195,7 @@ double Matrix::minordet(uint i, uint j) const {
 		throw ERR_NOT_SQUARE;
 	if (m_ < 3)
 		throw ERR_INCOMPATIBLE_SIZE;
-	return subMatrix(i, j).det();
+	return submatrix(i, j).det();
 }
 
 double Matrix::cofactor(uint i, uint j) const {

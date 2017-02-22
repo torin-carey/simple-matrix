@@ -35,10 +35,10 @@ int main(void) {
 		puts("All tests passed!");
 		
 		int Ai[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-		Matrix A(3, 3, Ai);
+		Matrix A{3, 3, Ai};
 		p(A);
-		p(A.subMatrix(1, 2));
-
+		Matrix B{A.submatrix(1, 0)}, C{A.submatrix(0, 1)}, D{A.submatrix(1, 1)};
+		p(B + C + D);
 	} catch (int i) {
 		cerr << "Error code: \033[1m" << i << "\033[0m" << endl;
 	}
