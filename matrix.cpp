@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 #include "matrix.hpp"
 
@@ -26,12 +27,28 @@ Matrix::Matrix(uint rows, uint cols) {
 		buf_[k] = 0;
 }
 
+Matrix::Matrix(uint rows, uint cols, std::vector<double> vector) {
+	m_ = rows;
+	n_ = cols;
+	buf_ = new double[rows * cols];
+	for (uint k = 0; k < (rows * cols); k++)
+		buf_[k] = vector[k];
+}
+
 Matrix::Matrix(uint rows, uint cols, double *values) {
 	m_ = rows;
 	n_ = cols;
 	buf_ = new double[m_ * n_];
 	for (int k = 0; k < (m_ * n_); k++)
 		buf_[k] = values[k];
+}
+
+Matrix::Matrix(uint rows, uint cols, std::vector<int> vector) {
+	m_ = rows;
+	n_ = cols;
+	buf_ = new double[rows * cols];
+	for (uint k = 0; k < (rows * cols); k++)
+		buf_[k] = vector[k];
 }
 
 Matrix::Matrix(uint rows, uint cols, int *values) {
