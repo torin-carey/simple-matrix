@@ -67,7 +67,8 @@ Matrix::Matrix(const Matrix& mat) {
 }
 
 Matrix::~Matrix() {
-	delete[] buf_;
+	if (buf_ != nullptr)
+		delete[] buf_;
 }
 
 uint Matrix::getM() const {
@@ -256,6 +257,30 @@ Matrix Matrix::invert() const {
 	} else
 		mat = adj();
 	mat /= deter;
+	return mat;
+}
+
+Matrix Matrix::guassianEliminate() const {
+	Matrix mat(*this);
+	Matrix row(1, n_);
+	for (uint i = 0; i < m_ - 1; i++) {
+		row = getRow(i);
+		double first = 0;
+		uint firstj;
+		for (uint j = 0; j < n_; j++)
+			if (j != 0) {
+				first = row.get(0, j);
+				firstj = j;
+				break;
+			}
+		if (first == 0)
+			throw ERR_NOT_ELIMINATABLE;
+
+		for (uint in = i + 1; in < m_; in++) {
+			double scalar = get(in, firstj) / first;
+			mat.setRow(in, mat.getRow(in) - (row * scalar));
+		}
+	}
 	return mat;
 }
 

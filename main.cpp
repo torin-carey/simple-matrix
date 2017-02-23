@@ -33,6 +33,11 @@ int main(void) {
 			die("Inverse test failed.");
 
 		puts("All tests passed!");
+		
+		Matrix m(3, 4, vector<int>{3,6,2,-1,4,-3,5,7,0,2,5,6});
+		p(m);
+		p(m.guassianEliminate());
+
 	} catch (int i) {
 		cerr << "Error code: \033[1m" << i << "\033[0m" << endl;
 	}

@@ -8,6 +8,7 @@
 #define ERR_OUT_OF_BOUNDS 2
 #define ERR_NOT_SQUARE 3
 #define ERR_NOT_INVERTIBLE 4
+#define ERR_NOT_ELIMINATABLE 5
 #define ERR_NOT_IMPL -1
 
 typedef unsigned int uint;
@@ -105,6 +106,9 @@ public:
 
 	// Inverts a square matrix
 	Matrix invert() const;
+
+	// Performs Gaussian elimination
+	Matrix guassianEliminate() const;
 
 	// Operator Overloads
 	// ==================
