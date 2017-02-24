@@ -34,9 +34,11 @@ int main(void) {
 
 		puts("All tests passed!");
 		
-		Matrix m(3, 4, vector<int>{3,6,2,-1,4,-3,5,7,0,2,5,6});
+		Matrix m(3, 3, vector<int>{1,2,1,2,3,1,1,1,-1});
+		Matrix ans(3, 1, vector<int>{2,4,3});
 		p(m);
-		p(m.guassianEliminate());
+		p(ans);
+		p(m.solve(ans));
 
 	} catch (int i) {
 		cerr << "Error code: \033[1m" << i << "\033[0m" << endl;

@@ -1,11 +1,13 @@
 #include <iostream>
 #include <cmath>
+#include <climits>
 #include <vector>
 
 #include "matrix.hpp"
 
 // Error used for comparisons
 #define EPSILON 0.0000000001
+#define EQUAL(a, b) abs((a) - (b)) < EPSILON
 
 // BEGIN CLASS
 
@@ -260,7 +262,53 @@ Matrix Matrix::invert() const {
 	return mat;
 }
 
-Matrix Matrix::guassianEliminate() const {
+Matrix Matrix::solve(const Matrix& ans) const {
+	if (!isSquare())
+		throw ERR_NOT_SQUARE;
+	if (ans.m_ != m_ || ans.n_ != 1)
+		throw ERR_INCOMPATIBLE_SIZE;
+	double deter = det();
+	if (deter == 0)
+		throw ERR_NOT_SOLVABLE;
+	Matrix res(m_, 1);
+	Matrix mat;
+	for (uint j = 0; j < n_; j++) {
+		mat = *this;
+		mat.setCol(j, ans);
+		res.set(j, 0, mat.det() / deter);
+	}
+	return res;
+}
+
+// TODO
+/*Matrix Matrix::guassianEliminate() const {
+	Matrix mat(*this);
+	Matrix row(1, n_);
+	for (uint i = 0; i < m_; i++) {
+		row = mat.getRow(i);
+		// First non zero term in row
+		uint fnz = UINT_MAX;
+		for (uint j = 0; j < n_; j++)
+			if (!EQUAL(get(i, j), 0)) {
+				fnz = j;
+				break;
+			}
+		if (fnz == UINT_MAX)
+			continue;
+		std::cout << "FNZ(" << i << ", " << fnz << ")\n";
+		double term = get(i, fnz);
+		for (uint ii = 0; ii < m_; ii++) {
+			if (ii == i)
+				continue;
+			double iterm = get(ii, fnz);
+			mat.setRow(ii, mat.getRow(ii) - (row * (iterm/term)));
+		}
+		std::cout << mat << std::endl;
+	}
+	return mat;
+}*/
+
+/*Matrix Matrix::guassianEliminate() const {
 	Matrix mat(*this);
 	Matrix row(1, n_);
 	for (uint i = 0; i < m_ - 1; i++) {
@@ -282,7 +330,7 @@ Matrix Matrix::guassianEliminate() const {
 		}
 	}
 	return mat;
-}
+}*/
 
 Matrix& Matrix::operator=(const Matrix& a) {
 	if (m_ == 0 || n_ == 0) {

@@ -4,11 +4,12 @@
 #include <iostream>
 #include <vector>
 
+// TODO Implement actual exceptions
 #define ERR_INCOMPATIBLE_SIZE 1
 #define ERR_OUT_OF_BOUNDS 2
 #define ERR_NOT_SQUARE 3
 #define ERR_NOT_INVERTIBLE 4
-#define ERR_NOT_ELIMINATABLE 5
+#define ERR_NOT_SOLVABLE 5
 #define ERR_NOT_IMPL -1
 
 typedef unsigned int uint;
@@ -106,9 +107,13 @@ public:
 
 	// Inverts a square matrix
 	Matrix invert() const;
+	
+	// Solves a system of equations in a square matrix
+	Matrix solve(const Matrix& ans) const;
 
-	// Performs Gaussian elimination
-	Matrix guassianEliminate() const;
+	// TODO
+	/*// Performs Gaussian elimination
+	Matrix guassianEliminate() const;*/
 
 	// Operator Overloads
 	// ==================
