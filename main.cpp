@@ -31,15 +31,7 @@ int main(void) {
 			die("Cofactor test failed.");
 		if (!test_inverse())
 			die("Inverse test failed.");
-
 		puts("All tests passed!");
-		
-		Matrix m(3, 3, vector<int>{1,2,1,2,3,1,1,1,-1});
-		Matrix ans(3, 1, vector<int>{2,4,3});
-		p(m);
-		p(ans);
-		p(m.solve(ans));
-
 	} catch (int i) {
 		cerr << "Error code: \033[1m" << i << "\033[0m" << endl;
 	}
