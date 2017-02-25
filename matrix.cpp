@@ -395,72 +395,71 @@ bool Matrix::operator==(const Matrix& a) {
 // END CLASS
 
 namespace matrix {
-
-Matrix identityMatrix(uint m) {
-	Matrix mat(m, m);
-	for (uint k = 0; k < m; k++)
-		mat.set(k, k, 1);
-	return mat;
-}
-
-std::ostream& operator<<(std::ostream& out, const Matrix& a) {
-	double val;
-	for (uint i = 0; i < a.getM(); i++) {
-		out << "|\t";
-		for (uint j = 0; j < a.getN(); j++) {
-			if (j)
-				out << '\t';
-			val = a.get(i, j);
-			if (std::abs(val) < EPSILON)
-				val = 0;
-			out << val;
+	
+	Matrix identityMatrix(uint m) {
+		Matrix mat(m, m);
+		for (uint k = 0; k < m; k++)
+			mat.set(k, k, 1);
+		return mat;
+	}
+	
+	std::ostream& operator<<(std::ostream& out, const Matrix& a) {
+		double val;
+		for (uint i = 0; i < a.getM(); i++) {
+			out << "|\t";
+			for (uint j = 0; j < a.getN(); j++) {
+				if (j)
+					out << '\t';
+				val = a.get(i, j);
+				if (std::abs(val) < EPSILON)
+					val = 0;
+				out << val;
+			}
+			out << "\t|" << std::endl;
 		}
-		out << "\t|" << std::endl;
+		return out;
 	}
-	return out;
-}
-
-Matrix operator+(const Matrix& a, const Matrix& b) {
-	Matrix mat(a);
-	mat += b;
-	return mat;
-}
-
-Matrix operator-(const Matrix& a, const Matrix& b) {
-	Matrix mat(a);
-	mat -= b;
-	return mat;
-}
-
-Matrix operator*(const Matrix& a, double b) {
-	Matrix mat(a);
-	mat *= b;
-	return mat;
-}
-
-Matrix operator*(double a, const Matrix& b) {
-	return b * a;
-}
-
-Matrix operator*(const Matrix& a, const Matrix& b) {
-	if (a.getN() != b.getM())
-		throw bad_size();
-	Matrix mat(a.getM(), b.getN());
-	for (uint i = 0; i < a.getM(); i++)
-	for (uint j = 0; j < b.getN(); j++) {
-		double sum = 0;
-		for (uint k = 0; k < a.getN(); k++)
-			sum += a.get(i, k) * b.get(k, j);
-		mat.set(i, j, sum);
+	
+	Matrix operator+(const Matrix& a, const Matrix& b) {
+		Matrix mat(a);
+		mat += b;
+		return mat;
 	}
-	return mat;
+	
+	Matrix operator-(const Matrix& a, const Matrix& b) {
+		Matrix mat(a);
+		mat -= b;
+		return mat;
+	}
+	
+	Matrix operator*(const Matrix& a, double b) {
+		Matrix mat(a);
+		mat *= b;
+		return mat;
+	}
+	
+	Matrix operator*(double a, const Matrix& b) {
+		return b * a;
+	}
+	
+	Matrix operator*(const Matrix& a, const Matrix& b) {
+		if (a.getN() != b.getM())
+			throw bad_size();
+		Matrix mat(a.getM(), b.getN());
+		for (uint i = 0; i < a.getM(); i++)
+		for (uint j = 0; j < b.getN(); j++) {
+			double sum = 0;
+			for (uint k = 0; k < a.getN(); k++)
+				sum += a.get(i, k) * b.get(k, j);
+			mat.set(i, j, sum);
+		}
+		return mat;
+	}
+	
+	Matrix operator/(const Matrix& a, double b) {
+		Matrix mat(a);
+		mat /= b;
+		return mat;
+	}
+	
 }
-
-Matrix operator/(const Matrix& a, double b) {
-	Matrix mat(a);
-	mat /= b;
-	return mat;
-}
-
-}
-
