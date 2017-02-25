@@ -9,6 +9,7 @@
 #include "matrix.hpp"
 
 using namespace std;
+using namespace matrix;
 
 void die(const string& msg) {
 	cerr << "Error: " << msg << endl;
@@ -32,8 +33,8 @@ int main(void) {
 		if (!test_inverse())
 			die("Inverse test failed.");
 		puts("All tests passed!");
-	} catch (int i) {
-		cerr << "Error code: \033[1m" << i << "\033[0m" << endl;
+	} catch (exception& e) {
+		cerr << "Error: " << e.what() << endl;
 	}
 }
 

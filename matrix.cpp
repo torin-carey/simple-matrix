@@ -9,10 +9,12 @@
 #define EPSILON 0.0000000001
 #define EQUAL(a, b) abs((a) - (b)) < EPSILON
 
+using namespace matrix;
+
 // BEGIN CLASS
 
 #define index(i, j) ((i) + (m_ * (j)))
-#define check_size(mat) if (!((mat).m_ == m_ && (mat).n_ == n_)) throw ERR_INCOMPATIBLE_SIZE
+#define check_size(mat) if (!((mat).m_ == m_ && (mat).n_ == n_)) throw bad_size();
 #define for_ij(m, n) for (uint i = 0; i < (m); i++) for (uint j = 0; j < (n); j++)
 
 Matrix::Matrix() {
@@ -83,13 +85,13 @@ uint Matrix::getN() const {
 
 double Matrix::get(uint i, uint j) const {
 	if (i >= m_ || j >= n_)
-		throw ERR_OUT_OF_BOUNDS;
+		throw std::out_of_range("Term isn't within matrix");
 	return buf_[index(i, j)];
 }
 
 void Matrix::set(uint i, uint j, double value) {
 	if (i >= m_ || j >= n_)
-		throw ERR_OUT_OF_BOUNDS * 8;
+		throw std::out_of_range("Term isn't within matrix");
 	buf_[index(i, j)] = value;
 }
 
@@ -117,14 +119,14 @@ Matrix Matrix::getCol(uint j) const {
 
 void Matrix::setRow(uint i, const Matrix& row) {
 	if (row.m_ != 1 || row.n_ != n_)
-		throw ERR_INCOMPATIBLE_SIZE;
+		throw bad_size();
 	for (int j = 0; j < n_; j++)
 		set(i, j, row.get(0, j));
 }
 
 void Matrix::setCol(uint j, const Matrix& col) {
 	if (col.n_ != 1 || col.m_ != m_)
-		throw ERR_INCOMPATIBLE_SIZE;
+		throw bad_size();
 	for (int i = 0; i < m_; i++)
 		set(i, j, col.get(i, 0));
 }
@@ -133,9 +135,9 @@ void Matrix::setCol(uint j, const Matrix& col) {
 #include "permutation.cpp"
 double Matrix::det() const {
 	if (!isSquare())
-		throw ERR_NOT_SQUARE;
+		throw not_square();
 	if (m_ < 2)
-		throw ERR_INCOMPATIBLE_SIZE;
+		throw bad_size();
 	if (m_ == 2) // Might as well speed things up
 		return (get(0, 0) * get(1, 1)) - (get(0, 1) * get(1, 0));
 	
@@ -156,9 +158,9 @@ double Matrix::det() const {
 #else
 double Matrix::det() const {
 	if (!isSquare())
-		throw ERR_NOT_SQUARE;
+		throw not_square();
 	if (m_ < 2)
-		throw ERR_INCOMPATIBLE_SIZE;
+		throw bad_size();
 	if (m_ == 2)
 		return (get(0, 0) * get(1, 1)) - (get(0, 1) * get(1, 0));
 	Matrix mat(m_ - 1, m_ - 1);
@@ -212,9 +214,9 @@ Matrix Matrix::submatrix(uint i, uint j) const {
 
 double Matrix::minordet(uint i, uint j) const {
 	if (!isSquare())
-		throw ERR_NOT_SQUARE;
+		throw not_square();
 	if (m_ < 3)
-		throw ERR_INCOMPATIBLE_SIZE;
+		throw bad_size();
 	return submatrix(i, j).det();
 }
 
@@ -225,7 +227,7 @@ double Matrix::cofactor(uint i, uint j) const {
 
 Matrix Matrix::minorMatrix() const {
 	if (!isSquare())
-		throw ERR_NOT_SQUARE;
+		throw not_square();
 	Matrix mat(m_, m_);
 	for (uint i = 0; i < m_; i++)
 	for (uint j = 0; j < m_; j++)
@@ -245,10 +247,10 @@ Matrix Matrix::cofactorMatrix() const {
 
 Matrix Matrix::invert() const {
 	if (!isSquare())
-		throw ERR_NOT_SQUARE;
+		throw not_square();
 	double deter = det();
 	if (deter == 0)
-		throw ERR_NOT_INVERTIBLE;
+		throw not_invertible();
 	Matrix mat;
 	if (m_ == 2) {
 		mat = Matrix(2, 2);
@@ -264,12 +266,12 @@ Matrix Matrix::invert() const {
 
 Matrix Matrix::solve(const Matrix& ans) const {
 	if (!isSquare())
-		throw ERR_NOT_SQUARE;
+		throw not_square();
 	if (ans.m_ != m_ || ans.n_ != 1)
-		throw ERR_INCOMPATIBLE_SIZE;
+		throw bad_size();
 	double deter = det();
 	if (deter == 0)
-		throw ERR_NOT_SOLVABLE;
+		throw not_solvable();
 	Matrix res(m_, 1);
 	Matrix mat;
 	for (uint j = 0; j < n_; j++) {
@@ -392,6 +394,8 @@ bool Matrix::operator==(const Matrix& a) {
 
 // END CLASS
 
+namespace matrix {
+
 Matrix identityMatrix(uint m) {
 	Matrix mat(m, m);
 	for (uint k = 0; k < m; k++)
@@ -440,7 +444,7 @@ Matrix operator*(double a, const Matrix& b) {
 
 Matrix operator*(const Matrix& a, const Matrix& b) {
 	if (a.getN() != b.getM())
-		throw ERR_INCOMPATIBLE_SIZE;
+		throw bad_size();
 	Matrix mat(a.getM(), b.getN());
 	for (uint i = 0; i < a.getM(); i++)
 	for (uint j = 0; j < b.getN(); j++) {
@@ -456,5 +460,7 @@ Matrix operator/(const Matrix& a, double b) {
 	Matrix mat(a);
 	mat /= b;
 	return mat;
+}
+
 }
 
