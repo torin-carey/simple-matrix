@@ -2,7 +2,6 @@
 #define SIMPLE_MATRIX_MATRIX_H_
 
 #include <iostream>
-#include <vector>
 
 namespace matrix {
 	struct bad_size : public std::exception {
@@ -48,12 +47,12 @@ namespace matrix {
 	
 		// Creates a matrix and fills vertically with
 		// values from values
-		Matrix(uint rows, uint cols, std::vector<double>);
+		Matrix(uint rows, uint cols, std::initializer_list<double>);
 		Matrix(uint rows, uint cols, double *values);
 	
 		// Creates a matrix and fills vertically with
 		// integer values from values
-		Matrix(uint rows, uint cols, std::vector<int>);
+		Matrix(uint rows, uint cols, std::initializer_list<int>);
 		Matrix(uint rows, uint cols, int *values);
 	
 		// Copies another matrix

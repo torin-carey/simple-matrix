@@ -39,26 +39,26 @@ int main(void) {
 }
 
 int test_det(void) {
-	Matrix A{4, 4, vector<int>{3,1,4,5,0,2,0,0,2,0,6,2,-1,-2,-3,0}};
+	Matrix A{4, 4, {3,1,4,5,0,2,0,0,2,0,6,2,-1,-2,-3,0}};
 	return A.det() == 20;
 }
 
 int test_minor(void) {
-	Matrix A{4, 4, vector<int>{1,2,4,7,2,2,5,8,3,2,6,9,4,4,4,4}};
-	Matrix B{4, 4, vector<int>{1,5,0,2,3,1,1,-1,-2,0,0,0,1,-1,-2,3}};
+	Matrix A{4, 4, {1,2,4,7,2,2,5,8,3,2,6,9,4,4,4,4}};
+	Matrix B{4, 4, {1,5,0,2,3,1,1,-1,-2,0,0,0,1,-1,-2,3}};
 	double m24 = A.minordet(1, 3);
 	double m02 = B.minordet(0, 2);
 	return m24 == 0 && m02 == 3;
 }
 
 int test_cofactor(void) {
-	Matrix A{3, 3, vector<int>{1,3,-1,4,0,9,7,5,11}};
+	Matrix A{3, 3, {1,3,-1,4,0,9,7,5,11}};
 	double c02 = A.cofactor(1, 2);
 	return c02 == -13;
 }
 
 int test_inverse(void) {
-	Matrix A{3, 3, vector<int>{3,2,0,0,0,1,2,-2,1}};
+	Matrix A{3, 3, {3,2,0,0,0,1,2,-2,1}};
 	Matrix inv = A.invert();
 	return A * inv == identityMatrix(3);
 }
