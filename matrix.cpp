@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cmath>
 #include <climits>
-#include <vector>
 
 #include "matrix.hpp"
 
@@ -31,12 +30,13 @@ Matrix::Matrix(uint rows, uint cols) {
 		buf_[k] = 0;
 }
 
-Matrix::Matrix(uint rows, uint cols, std::vector<double> vector) {
+Matrix::Matrix(uint rows, uint cols, std::initializer_list<double> list) {
 	m_ = rows;
 	n_ = cols;
 	buf_ = new double[rows * cols];
-	for (uint k = 0; k < (rows * cols); k++)
-		buf_[k] = vector[k];
+	const double *ptr = list.begin();
+	for (uint k = 0; (k < (rows * cols)) && (ptr != list.end()); k++)
+		buf_[k] = *ptr++;
 }
 
 Matrix::Matrix(uint rows, uint cols, double *values) {
@@ -47,12 +47,13 @@ Matrix::Matrix(uint rows, uint cols, double *values) {
 		buf_[k] = values[k];
 }
 
-Matrix::Matrix(uint rows, uint cols, std::vector<int> vector) {
+Matrix::Matrix(uint rows, uint cols, std::initializer_list<int> list) {
 	m_ = rows;
 	n_ = cols;
 	buf_ = new double[rows * cols];
-	for (uint k = 0; k < (rows * cols); k++)
-		buf_[k] = vector[k];
+	const int *ptr = list.begin();
+	for (uint k = 0; (k < (rows * cols)) && (ptr != list.end()); k++)
+		buf_[k] = *ptr++;
 }
 
 Matrix::Matrix(uint rows, uint cols, int *values) {
