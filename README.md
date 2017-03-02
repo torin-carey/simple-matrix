@@ -35,12 +35,54 @@ std::cout << B << std::endl;
 ```
 
 ## Addition and Subtraction
-TODO
+Given any two matricies strictly of the same size, we can add or subtract them
+```c++
+Matrix A{3, 2}, B{3, 2};
+
+// ...
+
+Matrix C = A + B;
+// or
+Matrix C = A;
+C += B;
+```
+Or even subtract
+```c++
+Matrix C = A - B;
+```
 
 ## Scalar multiplication
-TODO
+Given a matrix of any size, we can multiply all the elements of the matrix by the same scalar constant
+```c++
+Matrix A;
+double c;
+
+// ...
+
+Matrix B = A * c;
+// or
+Matrix B = c * A;
+// or
+Matrix B = A;
+B *= c;
+```
 
 ## Matrix multiplication
+Given two matricies A and B, if the number of columns in A equals the number of rows in B, then we can calculate A * B. NOTE: As matrix multiplication is not commutative, this is not the same as B * A.
+```c++
+Matrix A, B;
+assert(A.getN() == B.getM());
+
+// ...
+
+Matrix C = A * B;
+// or
+Matrix C = B;
+C *= A;
+```
+The second example may be confusing, this order was decided on as this would make more sense when using matricies as a map between vectors, such as transformations in 3D or 2D.
+
+## Element getting and setting
 TODO
 
 ## Row getting and setting
