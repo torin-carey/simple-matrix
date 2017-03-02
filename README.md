@@ -33,3 +33,36 @@ std::cout << B << std::endl;
 |	+3	+4	|
 |	+5	+6	|
 ```
+
+## Addition and Subtraction
+TODO
+
+## Scalar multiplication
+TODO
+
+## Matrix multiplication
+TODO
+
+## Row getting and setting
+TODO
+
+## Determinants
+TODO
+
+## Transposition
+TODO
+
+## Adjugates
+TODO
+
+## Submatricies
+TODO
+
+## Matrix cofactor
+TODO
+
+## Inverting a matrix
+TODO
+
+## Solving linear systems
+TODO
