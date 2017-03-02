@@ -1,7 +1,7 @@
 # simple-matrix
 Simple C++ library for dealing with matricies.
 
-# Advanced functions
+## Advanced functions
 Some of the advanced functionality of simple-matrix include
 * Determinants of any sized square matrix
 * Square matrix inverting
@@ -105,7 +105,34 @@ A.set(0, 2, 8.5);
 This modified the matrix A itself and doesn't create a new one.
 
 ## Row getting and setting
-TODO
+We can get and set individual rows and columns in a simular manner to elements.
+If we want to access a row, we refer to the *i*th row, if we want to access a column, we refer to the *j*th column.
+We can simply get rows and columns as matricies
+```c++
+Matrix A{3, 4};
+
+// ...
+
+Matrix row = A.getRow(1); // Gets the second row
+assert(row.getM() == 1 && row.getN() == A.getN());
+
+Matrix col = A.getCol(2); // Gets the third column
+assert(col.getM() == A.getM() && col.getN() == 1);
+```
+If you'd rather have a row as a column vector or vice-versa, you can always *transpose* the row/column.
+
+If, on the other hand, you'd like to set whole rows or columns, you can do that in a simular manner to element setting.
+```c++
+Matrix row{1, 4};
+Matrix col{3, 1};
+Matrix A{3, 4};
+
+// ...
+
+A.setRow(2, row); // Sets the third row to 'row'
+A.setCol(3, col); // Sets the fourth column to 'col'
+```
+This does change the matrix `A` but leaves `row` and `col` unmodified.
 
 ## Determinants
 TODO
