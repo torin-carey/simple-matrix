@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS=-O3
 DEPS=matrix.hpp
-OBJ = matrix.o
+OBJ=matrix.o
 
 %.o: %.c $(DEPS)
 	$(CC) -co $@ $< $(CFLAGS)
