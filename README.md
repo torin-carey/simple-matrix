@@ -18,18 +18,18 @@ Matrix A{m, n};
 ```
 Optionally, at initialisation, we can specify the entries within the matrix
 ```c++
-Matrix B{3, 2, {1, 4, 2, 5, 3, 6}};
+Matrix B{3, 2, {1, 3, 5, 2, 4, 6}};
 ```
 It's worth noting that using this style, the matrix is filled from the top-left corner downwards, and then left. This may be changed in the future.
 
 ## Printing matricies
 The Matrix object can simply be outputted to any output stream
 ```c++
-Matrix B{3, 2, {1, 4, 2, 5, 3, 6}};
+Matrix B{3, 2, {1, 3, 5, 2, 4, 6}};
 std::cout << B << std::endl;
 ```
 ```
-|	+1	+5	|
-|	+4	+3	|
-|	+2	+6	|
+|	+1	+2	|
+|	+3	+4	|
+|	+5	+6	|
 ```
