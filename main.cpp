@@ -33,6 +33,8 @@ int main(void) {
 		if (!test_inverse())
 			die("Inverse test failed.");
 		puts("All tests passed!");
+		Matrix B{3, 2, {1, 4, 2, 5, 3, 6}};
+		p(B);
 	} catch (exception& e) {
 		cerr << "Error: " << e.what() << endl;
 	}
