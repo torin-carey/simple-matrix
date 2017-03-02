@@ -135,7 +135,18 @@ A.setCol(3, col); // Sets the fourth column to 'col'
 This does change the matrix `A` but leaves `row` and `col` unmodified.
 
 ## Determinants
-TODO
+We can simply and efficiently calculate the determinant of a square matrix
+```c++
+Matrix A;
+
+// ...
+
+assert(A.isSquare()); // We can only calculate determiants for square matricies
+
+double det = A.det();
+```
+
+*Determinants are an extremely useful tool for dealing with matricies, if you would like to know about them, click [here](https://en.wikipedia.org/wiki/Determinant)*
 
 ## Transposition
 TODO
