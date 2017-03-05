@@ -2,23 +2,28 @@ CC=g++
 CFLAGS=-O3
 BIN=./bin
 SRC=./src
-DEPS=$(SRC)/matrix.hpp
+DEPS=$(BIN) $(SRC)/matrix.hpp
 
 OBJ=matrix.o permutation.o
+LIBRARY=libsimplematrix.a
 
 $(BIN)/%.o: $(SRC)/%.cpp $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-simple-matrix: $(addprefix $(BIN)/, $(OBJ))
-	ar rvs libsimplematrix.a $^
+$(LIBRARY): $(addprefix $(BIN)/, $(OBJ))
+	ar rvs $(LIBRARY) $^
 
-test: simple-matrix
-	$(CC) -o test $(SRC)/main.cpp libsimplematrix.a $(CFLAGS)
+$(BIN):
+	mkdir -p bin
+
+test: $(LIBRARY)
+	$(CC) -o test $(SRC)/main.cpp $(LIBRARY) $(CFLAGS)
 
 .PHONY: clean reset
 
 clean:
 	rm -f $(addprefix $(BIN)/, $(OBJ))
+	rmdir $(BIN)
 
 reset: clean
-	rm -f libsimplematrix.a test
+	rm -f $(LIBRARY) test
