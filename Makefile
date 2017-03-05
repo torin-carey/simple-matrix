@@ -1,18 +1,24 @@
 CC=g++
 CFLAGS=-O3
-DEPS=matrix.hpp
-OBJ=matrix.o
+BIN=./bin
+SRC=./src
+DEPS=$(SRC)/matrix.hpp
 
-%.o: %.c $(DEPS)
-	$(CC) -co $@ $< $(CFLAGS)
+OBJ=matrix.o permutation.o
 
-simple-matrix: $(OBJ)
-	ar rvs simple-matrix.a $^
+$(BIN)/%.o: $(SRC)/%.cpp $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
 
-example: simple-matrix
-	$(CC) -o example main.cpp simple-matrix.a $(CFLAGS)
+simple-matrix: $(addprefix $(BIN)/, $(OBJ))
+	ar rvs libsimplematrix.a $^
 
-.PHONY: clean
+test: simple-matrix
+	$(CC) -o test $(SRC)/main.cpp libsimplematrix.a $(CFLAGS)
+
+.PHONY: clean reset
 
 clean:
-	rm *.o
+	rm -f $(addprefix $(BIN)/, $(OBJ))
+
+reset: clean
+	rm -f libsimplematrix.a test

@@ -34,6 +34,10 @@ namespace matrix {
 		// m_ and n_ store the number of rows
 		// and columns respectively.
 		uint m_, n_;
+		// Permutation functions, used for determintant calculation
+		static inline uint permutation_position(uint n, uint i, uint *p);
+		static void permutation_init(uint n, uint *p, uint *v);
+		static int permutation_permute(uint n, uint *p, uint *v);
 	public:
 		// Basic
 		// =====
@@ -143,7 +147,7 @@ namespace matrix {
 	
 	// Creates an identity matrix with the given size
 	Matrix identityMatrix(uint m);
-	
+
 	std::ostream& operator<<(std::ostream&, const Matrix&);
 	Matrix operator+(const Matrix&, const Matrix&);
 	Matrix operator-(const Matrix&, const Matrix&);

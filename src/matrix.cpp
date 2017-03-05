@@ -133,7 +133,6 @@ void Matrix::setCol(uint j, const Matrix& col) {
 }
 
 #ifndef DET_OLD
-#include "permutation.cpp"
 double Matrix::det() const {
 	if (!isSquare())
 		throw not_square();
@@ -143,7 +142,7 @@ double Matrix::det() const {
 		return (get(0, 0) * get(1, 1)) - (get(0, 1) * get(1, 0));
 	
 	uint p[n_], v[n_];
-	init_permute(n_, p, v);
+	permutation_init(n_, p, v);
 	double detsum = 0, prod;
 	int sgn = 1;
 	do {
@@ -153,7 +152,7 @@ double Matrix::det() const {
 		prod *= sgn;
 		sgn = -sgn;
 		detsum += prod;
-	} while (permute(n_, p, v));
+	} while (permutation_permute(n_, p, v));
 	return detsum;
 }
 #else
@@ -282,58 +281,6 @@ Matrix Matrix::solve(const Matrix& ans) const {
 	}
 	return res;
 }
-
-// TODO
-/*Matrix Matrix::guassianEliminate() const {
-	Matrix mat(*this);
-	Matrix row(1, n_);
-	for (uint i = 0; i < m_; i++) {
-		row = mat.getRow(i);
-		// First non zero term in row
-		uint fnz = UINT_MAX;
-		for (uint j = 0; j < n_; j++)
-			if (!EQUAL(get(i, j), 0)) {
-				fnz = j;
-				break;
-			}
-		if (fnz == UINT_MAX)
-			continue;
-		std::cout << "FNZ(" << i << ", " << fnz << ")\n";
-		double term = get(i, fnz);
-		for (uint ii = 0; ii < m_; ii++) {
-			if (ii == i)
-				continue;
-			double iterm = get(ii, fnz);
-			mat.setRow(ii, mat.getRow(ii) - (row * (iterm/term)));
-		}
-		std::cout << mat << std::endl;
-	}
-	return mat;
-}*/
-
-/*Matrix Matrix::guassianEliminate() const {
-	Matrix mat(*this);
-	Matrix row(1, n_);
-	for (uint i = 0; i < m_ - 1; i++) {
-		row = getRow(i);
-		double first = 0;
-		uint firstj;
-		for (uint j = 0; j < n_; j++)
-			if (j != 0) {
-				first = row.get(0, j);
-				firstj = j;
-				break;
-			}
-		if (first == 0)
-			throw ERR_NOT_ELIMINATABLE;
-
-		for (uint in = i + 1; in < m_; in++) {
-			double scalar = get(in, firstj) / first;
-			mat.setRow(in, mat.getRow(in) - (row * scalar));
-		}
-	}
-	return mat;
-}*/
 
 Matrix& Matrix::operator=(const Matrix& a) {
 	if (m_ == 0 || n_ == 0) {
