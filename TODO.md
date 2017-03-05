@@ -2,7 +2,6 @@
 
 * Finish README.md
   * Use LaTeX for matrix diagrams
-* Sort src into propper directories
 * Implement propper unit tests
 * Add matrix stream reading
 * Add row operations, such as

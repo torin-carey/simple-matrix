@@ -10,6 +10,13 @@ Some of the advanced functionality of simple-matrix include
 * Adjugates
 * Solving equations
 
+# Compiling
+simple-matrix can be compiled into a static library using GNU Make simply by typing `make` in this directory.
+
+A test executable can be created with `make test` and object files can be cleared with `make clean`.
+
+To reset the directory by removing all produced binaries, including the generated library, `make reset` can be executed.
+
 # Using matricies
 ## Creating a matrix
 We can create a matrix of size m by n filled with zeros
