@@ -283,13 +283,18 @@ Matrix Matrix::solve(const Matrix& ans) const {
 }
 
 Matrix& Matrix::operator=(const Matrix& a) {
-	if (m_ == 0 || n_ == 0) {
+	if (this == &a)
+		return *this;
+	if (m_ != a.getM() || n_ != a.getN()) {
+		if (m_ == 0 || n_ == 0) {
+			delete[] buf_;
+		}
 		m_ = a.getM();
 		n_ = a.getN();
 		buf_ = new double[m_ * n_];
-	} else
-		check_size(a);
-	for_ij(m_, n_) set(i, j, a.get(i, j));
+	}
+	for (uint k = 0; k < (m_ * n_); k++)
+		buf_[k] = a.buf_[k];
 	return *this;
 }
 
