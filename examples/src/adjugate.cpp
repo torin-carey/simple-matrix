@@ -16,7 +16,7 @@ int main() {
 			return -1;
 		}
 
-		cout << "det A = " << input.det() << endl;
+		cout << "adj A =" << endl << input.adj() << endl;
 	} catch (invalid_argument& e) {
 		cerr << "Error: " << e.what() << endl;
 	}

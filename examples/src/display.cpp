@@ -11,12 +11,7 @@ int main() {
 		cout << "A = ";
 		cin >> input;
 
-		if (!input.isSquare()) {
-			cerr << "Error: Matrix must be square" << endl;
-			return -1;
-		}
-
-		cout << "det A = " << input.det() << endl;
+		cout << "A =" << endl << input << endl;
 	} catch (invalid_argument& e) {
 		cerr << "Error: " << e.what() << endl;
 	}
