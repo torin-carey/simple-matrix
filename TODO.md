@@ -3,7 +3,8 @@
 * Finish README.md
   * Use LaTeX for matrix diagrams
 * Implement propper unit tests
-* Add matrix stream reading
+* Add more examples
+* Add explainations for the examples
 * Add row operations, such as
   * Addition
   * Multiplication
