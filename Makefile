@@ -13,7 +13,9 @@ LIBRARY=libsimplematrix.a
 TESTS=./tests
 TESTOBJ=main_test.o determinant_test.o minor_test.o  cofactor_test.o inverse_test.o
 
-all: $(BIN) $(LIBRARY) test.out
+EXAMPLE=./examples
+
+all: $(BIN) $(LIBRARY) test.out examples
 
 $(BIN)/%.o: $(SRC)/%.cpp $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -30,7 +32,10 @@ $(BIN)/%_test.o: $(TESTS)/%_test.cpp $(DEPS)
 test.out: $(addprefix $(BIN)/, $(TESTOBJ)) $(LIBRARY)
 	$(CC) -o $@ $^ $(CFLAGS)
 
-.PHONY: clean reset
+.PHONY: examples clean reset
+
+examples: $(EXAMPLE)/Makefile
+	@$(MAKE) -C $(EXAMPLE)
 
 clean:
 	rm -f $(addprefix $(BIN)/, $(OBJ))
@@ -39,3 +44,4 @@ clean:
 
 reset: clean
 	rm -f $(LIBRARY) test.out
+	@$(MAKE) -C $(EXAMPLE) reset
