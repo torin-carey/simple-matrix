@@ -3,6 +3,7 @@
 #include "matrix.hpp"
 
 using namespace std;
+using namespace matrix;
 
 int test_determinant();
 int test_minor();

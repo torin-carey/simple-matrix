@@ -2,6 +2,12 @@
 #define SIMPLE_MATRIX_MATRIX_H_
 
 #include <iostream>
+#include <iterator>
+#include <vector>
+
+// Error used for comparisons
+#define EPSILON 0.0000000001
+#define EQUAL(a, b) abs((a) - (b)) < EPSILON
 
 namespace matrix {
 	struct bad_size : public std::exception {
@@ -143,17 +149,101 @@ namespace matrix {
 		Matrix& operator*=(double);
 		Matrix& operator/=(double);
 		bool operator==(const Matrix&);
+		bool operator!=(const Matrix&);
 	};
 	
 	// Creates an identity matrix with the given size
 	Matrix identityMatrix(uint m);
 
 	std::ostream& operator<<(std::ostream&, const Matrix&);
+	std::istream& operator>>(std::istream&, Matrix&);
 	Matrix operator+(const Matrix&, const Matrix&);
 	Matrix operator-(const Matrix&, const Matrix&);
 	Matrix operator*(const Matrix&, double);
 	Matrix operator*(double, const Matrix&);
 	Matrix operator*(const Matrix&, const Matrix&);
 	Matrix operator/(const Matrix&, double);
+
+	// STL style parser
+
+	template <class InputIterator>
+	matrix::Matrix parseMatrix(InputIterator start, InputIterator end) {
+		uint m = 0;
+		uint n = 0;
+		uint cn = 0;
+		char ch;
+
+		enum {VOID, CAPTURE} STATE = VOID;
+		
+		std::vector<char> inp;
+		std::vector<double> mat;
+		
+		InputIterator i = start;
+		while (i != end) {
+			switch (STATE) {
+			case VOID:
+				switch (*i) {
+				case '[':
+				case '(':
+					STATE = CAPTURE;
+					break;
+				default:
+					// Unexpected value
+					throw std::invalid_argument{"Unexpected character encountered"};
+				}
+				break;
+			case CAPTURE:
+				switch (*i) {
+				case ',':
+					inp.push_back('\0');
+					mat.push_back(atof(inp.data()));
+					inp.clear();
+					cn++;
+					break;
+				case ']':
+					inp.push_back('\0');
+					mat.push_back(atof(inp.data()));
+					inp.clear();
+					cn++;
+					m++;
+					if (!(n == 0 || cn == n)) {
+						throw std::invalid_argument{"Column lengths must be consistent"};
+					}
+					n = cn;
+					cn = 0;
+					STATE = VOID;
+					i = end;
+					break;
+				case ';':
+					inp.push_back('\0');
+					mat.push_back(atof(inp.data()));
+					inp.clear();
+					cn++;
+					m++;
+					if (!(n == 0 || cn == n)) {
+						throw std::invalid_argument{"Column lengths must be consistent"};
+					}
+					n = cn;
+					cn = 0;
+					break;
+				default:
+					inp.push_back(*i);
+				}
+				break;
+			}
+			if (i != end)
+				++i;
+		}
+		if (STATE == CAPTURE) {
+			throw std::invalid_argument{"Premature end"};
+		}
+		Matrix M{m, n};
+		for (uint i = 0; i < m; i++)
+		for (uint j = 0; j < n; j++) {
+			M.set(i, j, mat[j + (i * n)]);
+		}
+		return M;
+	}
 }
+
 #endif // SIMPLE_MATRIX_MATRIX_H_

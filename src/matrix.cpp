@@ -341,6 +341,10 @@ bool Matrix::operator==(const Matrix& a) {
 	return true;
 }
 
+bool Matrix::operator!=(const Matrix& a) {
+	return !operator==(a);
+}
+
 #undef index
 #undef check_size
 #undef for_ij
@@ -371,6 +375,13 @@ namespace matrix {
 			out << "\t|" << std::endl;
 		}
 		return out;
+	}
+	
+	std::istream& operator>>(std::istream& in, Matrix& a) {
+		std::istream_iterator<char> start(in);
+		std::istream_iterator<char> end;
+		a = parseMatrix(start, end);
+		return in;
 	}
 	
 	Matrix operator+(const Matrix& a, const Matrix& b) {
