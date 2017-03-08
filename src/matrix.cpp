@@ -107,6 +107,10 @@ void Matrix::set(uint i, uint j, double value) {
 	buf_[index(i, j)] = value;
 }
 
+bool Matrix::isEmpty() const {
+	return m_ == 0 || n_ == 0;
+}
+
 bool Matrix::isSquare() const {
 	return m_ == n_;
 }

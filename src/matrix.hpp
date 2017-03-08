@@ -48,7 +48,7 @@ namespace matrix {
 		// Basic
 		// =====
 	
-		// Default constructor
+		// Default constructor, creates empty matrix
 		Matrix();
 	
 		// Creates an empty matrix
@@ -84,7 +84,11 @@ namespace matrix {
 	
 		// Sets the M_ij element
 		void set(uint i, uint j, double value);
-	
+		
+		// Returns true if either m or n are zero, useful
+		// for returning an undefined value
+		bool isEmpty() const;
+
 		// Returns true if matrix is a square matrix
 		bool isSquare() const;
 		
@@ -167,6 +171,9 @@ namespace matrix {
 		bool operator!=(const Matrix&);
 	};
 	
+	// 0x0 matrix
+	const Matrix EMPTY_MATRIX;
+
 	// Creates an identity matrix with the given size
 	Matrix identityMatrix(uint m);
 

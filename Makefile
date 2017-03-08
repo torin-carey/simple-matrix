@@ -5,7 +5,7 @@ SRC=./src
 
 CFLAGS=-O3 -I$(SRC)
 
-DEPS=$(BIN) $(SRC)/matrix.hpp
+DEPS=$(SRC)/matrix.hpp
 
 OBJ=matrix.o permutation.o
 LIBRARY=libsimplematrix.a
@@ -17,9 +17,11 @@ TESTOBJ+=inverse_test.o parse_test.o
 
 EXAMPLE=./examples
 
-all: $(BIN) $(LIBRARY) test.out examples
+library: $(LIBRARY)
 
-$(BIN)/%.o: $(SRC)/%.cpp $(DEPS)
+all: $(LIBRARY) test.out examples
+
+$(BIN)/%.o: $(SRC)/%.cpp $(DEPS) | $(BIN)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 $(LIBRARY): $(addprefix $(BIN)/, $(OBJ))
@@ -28,16 +30,20 @@ $(LIBRARY): $(addprefix $(BIN)/, $(OBJ))
 $(BIN):
 	mkdir -p bin
 
-$(BIN)/%_test.o: $(TESTS)/%_test.cpp $(DEPS)
+$(BIN)/%_test.o: $(TESTS)/%_test.cpp $(DEPS) | $(BIN)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 test.out: $(addprefix $(BIN)/, $(TESTOBJ)) $(LIBRARY)
 	$(CC) -o $@ $^ $(CFLAGS)
 
-.PHONY: examples clean reset
+.PHONY: examples install clean reset
 
 examples: $(EXAMPLE)/Makefile
 	@$(MAKE) -C $(EXAMPLE)
+
+install: $(LIBRARY)
+	cp $(SRC)/matrix.hpp /usr/local/include
+	cp $(LIBRARY) /usr/local/lib
 
 clean:
 	rm -f $(addprefix $(BIN)/, $(OBJ))
