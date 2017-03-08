@@ -21,6 +21,15 @@ library: $(LIBRARY)
 
 all: $(LIBRARY) test.out examples
 
+test: test.out
+
+examples: $(EXAMPLE)/Makefile
+	@$(MAKE) -C $(EXAMPLE)
+
+install: $(LIBRARY)
+	cp $(SRC)/matrix.hpp /usr/local/include
+	cp $(LIBRARY) /usr/local/lib
+
 $(BIN)/%.o: $(SRC)/%.cpp $(DEPS) | $(BIN)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
@@ -36,14 +45,7 @@ $(BIN)/%_test.o: $(TESTS)/%_test.cpp $(DEPS) | $(BIN)
 test.out: $(addprefix $(BIN)/, $(TESTOBJ)) $(LIBRARY)
 	$(CC) -o $@ $^ $(CFLAGS)
 
-.PHONY: examples install clean reset
-
-examples: $(EXAMPLE)/Makefile
-	@$(MAKE) -C $(EXAMPLE)
-
-install: $(LIBRARY)
-	cp $(SRC)/matrix.hpp /usr/local/include
-	cp $(LIBRARY) /usr/local/lib
+.PHONY: library all test examples install clean reset
 
 clean:
 	rm -f $(addprefix $(BIN)/, $(OBJ))
