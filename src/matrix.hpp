@@ -40,6 +40,11 @@ namespace matrix {
 		// m_ and n_ store the number of rows
 		// and columns respectively.
 		uint m_, n_;
+
+		#ifdef REUSE_DET
+		double det_;
+		#endif
+
 		// Permutation functions, used for determintant calculation
 		static inline uint permutation_position(uint n, uint i, uint *p);
 		static void permutation_init(uint n, uint *p, uint *v);
@@ -103,7 +108,11 @@ namespace matrix {
 
 		// Returns true if matrix is invertible
 		// that is, M.det() != 0
+		#ifdef REUSE_DET
+		bool isInvertible();
+		#else
 		bool isInvertible() const;
+		#endif
 	
 		// Gets the ith row as a row vector
 		Matrix getRow(uint i) const;
@@ -124,7 +133,11 @@ namespace matrix {
 		double trace() const;
 
 		// Calculates determinant
+		#ifdef REUSE_DET
+		double det();
+		#else
 		double det() const;
+		#endif
 	
 		// Transposes matrix
 		Matrix transpose() const;
@@ -148,10 +161,18 @@ namespace matrix {
 		Matrix cofactorMatrix() const;
 	
 		// Inverts a square matrix
+		#ifdef REUSE_DET
+		Matrix invert();
+		#else
 		Matrix invert() const;
+		#endif
 		
 		// Solves a system of equations in a square matrix
+		#ifdef REUSE_DET
+		Matrix solve(const Matrix& ans);
+		#else
 		Matrix solve(const Matrix& ans) const;
+		#endif
 	
 		// TODO
 		/*// Performs Gaussian elimination

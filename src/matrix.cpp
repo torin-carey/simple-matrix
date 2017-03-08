@@ -24,12 +24,18 @@ Matrix::Matrix() {
 	m_ = 0;
 	n_ = 0;
 	buf_ = nullptr;
+	#ifdef REUSE_DET
+	det_ = NAN;
+	#endif
 }
 
 Matrix::Matrix(uint rows, uint cols) {
 	m_ = rows;
 	n_ = cols;
 	buf_ = new double[m_ * n_];
+	#ifdef REUSE_DET
+	det_ = NAN;
+	#endif
 	for (uint k = 0; k < (m_ * n_); k++)
 		buf_[k] = 0;
 }
@@ -38,6 +44,9 @@ Matrix::Matrix(uint rows, uint cols, std::initializer_list<double> list) {
 	m_ = rows;
 	n_ = cols;
 	buf_ = new double[rows * cols];
+	#ifdef REUSE_DET
+	det_ = NAN;
+	#endif
 	const double *ptr = list.begin();
 	for (uint k = 0; (k < (rows * cols)) && (ptr != list.end()); k++)
 		buf_[k] = *ptr++;
@@ -47,6 +56,9 @@ Matrix::Matrix(uint rows, uint cols, double *values) {
 	m_ = rows;
 	n_ = cols;
 	buf_ = new double[m_ * n_];
+	#ifdef REUSE_DET
+	det_ = NAN;
+	#endif
 	for (int k = 0; k < (m_ * n_); k++)
 		buf_[k] = values[k];
 }
@@ -55,6 +67,9 @@ Matrix::Matrix(uint rows, uint cols, std::initializer_list<int> list) {
 	m_ = rows;
 	n_ = cols;
 	buf_ = new double[rows * cols];
+	#ifdef REUSE_DET
+	det_ = NAN;
+	#endif
 	const int *ptr = list.begin();
 	for (uint k = 0; (k < (rows * cols)) && (ptr != list.end()); k++)
 		buf_[k] = *ptr++;
@@ -64,6 +79,9 @@ Matrix::Matrix(uint rows, uint cols, int *values) {
 	m_ = rows;
 	n_ = cols;
 	buf_ = new double[m_ * n_];
+	#ifdef REUSE_DET
+	det_ = NAN;
+	#endif
 	for (int k = 0; k < (m_ * n_); k++)
 		buf_[k] = (double) values[k];
 }
@@ -72,6 +90,9 @@ Matrix::Matrix(const Matrix& mat) {
 	m_ = mat.m_;
 	n_ = mat.n_;
 	buf_ = new double[m_ * n_];
+	#ifdef REUSE_DET
+	det_ = mat.det_;
+	#endif
 	(*this) = mat;
 }
 
@@ -105,6 +126,9 @@ void Matrix::set(uint i, uint j, double value) {
 	if (i >= m_ || j >= n_)
 		throw std::out_of_range("Term isn't within matrix");
 	buf_[index(i, j)] = value;
+	#ifdef REUSE_DET
+	det_ = NAN;
+	#endif
 }
 
 bool Matrix::isEmpty() const {
@@ -141,7 +165,11 @@ bool Matrix::isLowerTriangular() const {
 	return true;
 }
 
+#ifdef REUSE_DET
+bool Matrix::isInvertible() {
+#else
 bool Matrix::isInvertible() const {
+#endif
 	return det() != 0;
 }
 
@@ -183,14 +211,22 @@ double Matrix::trace() const {
 }
 
 #ifndef DET_OLD
+
+#ifdef REUSE_DET
+double Matrix::det() {
+#else
 double Matrix::det() const {
+#endif
 	if (!isSquare())
 		throw not_square();
 	if (m_ < 2)
 		throw bad_size();
 	if (m_ == 2) // Might as well speed things up
 		return (get(0, 0) * get(1, 1)) - (get(0, 1) * get(1, 0));
-	
+	#ifdef REUSE_DET
+	if (!std::isnan(det_))
+		return det_;
+	#endif
 	uint p[n_], v[n_];
 	permutation_init(n_, p, v);
 	double detsum = 0, prod;
@@ -203,6 +239,9 @@ double Matrix::det() const {
 		sgn = -sgn;
 		detsum += prod;
 	} while (permutation_permute(n_, p, v));
+	#ifdef REUSE_DET
+	det_ = detsum;
+	#endif
 	return detsum;
 }
 #else
@@ -295,7 +334,11 @@ Matrix Matrix::cofactorMatrix() const {
 	return mat;
 }
 
+#ifdef REUSE_DET
+Matrix Matrix::invert() {
+#else
 Matrix Matrix::invert() const {
+#endif
 	if (!isSquare())
 		throw not_square();
 	double deter = det();
@@ -314,7 +357,11 @@ Matrix Matrix::invert() const {
 	return mat;
 }
 
+#ifdef REUSE_DET
+Matrix Matrix::solve(const Matrix& ans) {
+#else
 Matrix Matrix::solve(const Matrix& ans) const {
+#endif
 	if (!isSquare())
 		throw not_square();
 	if (ans.m_ != m_ || ans.n_ != 1)
@@ -345,40 +392,65 @@ Matrix& Matrix::operator=(const Matrix& a) {
 	}
 	for (uint k = 0; k < (m_ * n_); k++)
 		buf_[k] = a.buf_[k];
+	#ifdef REUSE_DET
+	det_ = a.det_;
+	#endif
 	return *this;
 }
 
 Matrix Matrix::operator-() {
 	Matrix a(m_, n_);
 	for_ij(m_, n_) buf_[index(i, j)] *= -1;
+	#ifdef REUSE_DET
+	if (!std::isnan(det_))
+		a.det_ = (n_ % 2 == 0) ? det_ : -det_;
+	#endif
 	return a;
 }
 
 Matrix& Matrix::operator+=(const Matrix& a) {
 	check_size(a);
 	for_ij(m_, n_) buf_[index(i, j)] += a.buf_[index(i, j)];
+	#ifdef REUSE_DET
+	det_ = NAN;
+	#endif
 	return *this;
 }
 
 Matrix& Matrix::operator-=(const Matrix& a) {
 	check_size(a);
 	for_ij(m_, n_) buf_[index(i, j)] -= a.buf_[index(i, j)];
+	#ifdef REUSE_DET
+	det_ = NAN;
+	#endif
 	return *this;
 }
 
 Matrix& Matrix::operator*=(const Matrix& a) {
 	Matrix mat = a * *this;
+	#ifdef REUSE_DET
+	if (!(std::isnan(det_) || std::isnan(a.det_)))
+		mat.det_ = det_ * a.det_;
+	#endif
 	*this = mat;
 	return *this;
 }
 
 Matrix& Matrix::operator*=(double a) {
 	for_ij(m_, n_) buf_[index(i, j)] *= a;
+	#ifdef REUSE_DET
+	if (!std::isnan(det_))
+		det_ *= pow(a, n_);
+	#endif
 	return *this;
 }
 
 Matrix& Matrix::operator/=(double a) {
 	for_ij(m_, n_) buf_[index(i, j)] /= a;
+	#ifdef REUSE_DET
+	if (!std::isnan(det_))
+		det_ /= pow(a, n_);
+	#endif
 	return *this;
 }
 

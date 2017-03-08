@@ -3,7 +3,7 @@ CC=g++
 BIN=./bin
 SRC=./src
 
-CFLAGS=-O3 -I$(SRC)
+CFLAGS=-O3 -I$(SRC) -DREUSE_DET
 
 DEPS=$(SRC)/matrix.hpp
 
