@@ -7,7 +7,7 @@
 
 // Error used for comparisons
 #define EPSILON 0.0000000001
-#define EQUAL(a, b) abs((a) - (b)) < EPSILON
+#define EQUAL(a, b) (abs((a) - (b)) < EPSILON)
 
 namespace matrix {
 	struct bad_size : public std::exception {
@@ -87,6 +87,15 @@ namespace matrix {
 	
 		// Returns true if matrix is a square matrix
 		bool isSquare() const;
+		
+		// Returns true if matrix is a diagonal matrix
+		bool isDiagonal() const;
+
+		// Returns true if matrix is an upper triangular matrix
+		bool isUpperTriangular() const;
+
+		// Returns true if matrix is a lower triangular matrix
+		bool isLowerTriangular() const;
 
 		// Returns true if matrix is invertible
 		// that is, M.det() != 0
@@ -106,7 +115,10 @@ namespace matrix {
 	
 		// Advanced
 		// ========
-	
+
+		// Calculates trace
+		double trace() const;
+
 		// Calculates determinant
 		double det() const;
 	
@@ -242,7 +254,7 @@ namespace matrix {
 				}
 				break;
 			}
-			if (i != end)
+			if (!(i == end || cancel))
 				++i;
 		}
 		if (STATE == CAPTURE) {

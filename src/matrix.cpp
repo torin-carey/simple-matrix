@@ -4,9 +4,13 @@
 
 #include "matrix.hpp"
 
+#ifndef EPSILON
 // Error used for comparisons
 #define EPSILON 0.0000000001
-#define EQUAL(a, b) abs((a) - (b)) < EPSILON
+#endif
+#ifndef EQUAL
+#define EQUAL(a, b) (abs((a) - (b)) < EPSILON)
+#endif
 
 using namespace matrix;
 
@@ -107,6 +111,32 @@ bool Matrix::isSquare() const {
 	return m_ == n_;
 }
 
+bool Matrix::isDiagonal() const {
+	if (!isSquare())
+		return false;
+	return isUpperTriangular() && isLowerTriangular();
+}
+
+bool Matrix::isUpperTriangular() const {
+	if (!isSquare())
+		return false;
+	for (uint i = 1; i < m_; i++)
+	for (uint j = 0; j < i; j++)
+		if (!EQUAL(get(i, j), 0))
+			return false;
+	return true;
+}
+
+bool Matrix::isLowerTriangular() const {
+	if (!isSquare())
+		return false;
+	for (uint j = 1; j < n_; j++)
+	for (uint i = 0; i < j; i++)
+		if (!EQUAL(get(i, j), 0))
+			return false;
+	return true;
+}
+
 bool Matrix::isInvertible() const {
 	return det() != 0;
 }
@@ -135,8 +165,17 @@ void Matrix::setRow(uint i, const Matrix& row) {
 void Matrix::setCol(uint j, const Matrix& col) {
 	if (col.n_ != 1 || col.m_ != m_)
 		throw bad_size();
-	for (int i = 0; i < m_; i++)
+	for (uint i = 0; i < m_; i++)
 		set(i, j, col.get(i, 0));
+}
+
+double Matrix::trace() const {
+	if (!isSquare())
+		throw not_square();
+	double trace = 0;
+	for (int i = 0; i < m_; i++)
+		trace += get(i, i);
+	return trace;
 }
 
 #ifndef DET_OLD
