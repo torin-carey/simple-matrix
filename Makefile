@@ -11,7 +11,9 @@ OBJ=matrix.o permutation.o
 LIBRARY=libsimplematrix.a
 
 TESTS=./tests
-TESTOBJ=main_test.o determinant_test.o minor_test.o  cofactor_test.o inverse_test.o
+TESTOBJ =main_test.o determinant_test.o 
+TESTOBJ+=minor_test.o  cofactor_test.o
+TESTOBJ+=inverse_test.o parse_test.o
 
 EXAMPLE=./examples
 

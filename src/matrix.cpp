@@ -12,7 +12,7 @@ using namespace matrix;
 
 // BEGIN CLASS
 
-#define index(i, j) ((i) + (m_ * (j)))
+#define index(i, j) ((n_ * (i)) + (j))
 #define check_size(mat) if (!((mat).m_ == m_ && (mat).n_ == n_)) throw bad_size();
 #define for_ij(m, n) for (uint i = 0; i < (m); i++) for (uint j = 0; j < (n); j++)
 
@@ -69,6 +69,13 @@ Matrix::Matrix(const Matrix& mat) {
 	n_ = mat.n_;
 	buf_ = new double[m_ * n_];
 	(*this) = mat;
+}
+
+Matrix::Matrix(const std::string& matstr) {
+	std::string::const_iterator start = matstr.cbegin();
+	std::string::const_iterator end;
+
+	*this = parseMatrix(start, end);
 }
 
 Matrix::~Matrix() {

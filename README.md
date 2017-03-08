@@ -27,20 +27,27 @@ Optionally, at initialisation, we can specify the entries within the matrix
 ```c++
 Matrix B{3, 2, {1, 3, 5, 2, 4, 6}};
 ```
-It's worth noting that using this style, the matrix is filled from the top-left corner downwards, and then left.
-
-**This may be changed in the future.**
+We can also use a string to initialise the matrix
+```c++
+Matrix C{"[1, 3;  5, 2;  4, 6]"};
+```
+Or even from an input stream
+```c++
+Matrix D;
+std::cin >> D;
+```
+It's worth noting that using this style, the matrix is filled from the top-left corner rightwards, and then down.
 
 ## Printing matricies
 The Matrix object can simply be outputted to any output stream
 ```c++
-Matrix B{3, 2, {1, 3, 5, 2, 4, 6}};
+Matrix B{3, 2, {1, 2, 3, 4, 5, 6}};
 std::cout << B << std::endl;
 ```
 ```
-|	+1	+2	|
-|	+3	+4	|
-|	+5	+6	|
+|	1	2	|
+|	3	4	|
+|	5	6	|
 ```
 
 ## Addition and Subtraction
@@ -101,9 +108,9 @@ Indexes in simple-matrix use *zero-based indexing*. This means if you want the t
 Individual elements may be accessed through setter/getter functions. We reference elements in a matrix through row by column, usually denoted by variables `i` and `j` respectively.
 Suppose we have the following matrix
 ```c++
-Matrix A{3, 3, {1, 4, 7, 2, 5, 8, 3, 6, 9};
+Matrix A{3, 3, {1, 2, 3, 4, 5, 6, 7, 8, 9};
 ```
-We can get, say the top-right element of the matrix as `A.get(0, 2)` as this is the first row, third column (remember *zero-based indexing*.
+We can get, say the top-right element of the matrix as `A.get(0, 2)` as this is the first row, third column (remember *zero-based indexing*).
 
 We could also set the top-right element to 8.5
 ```c++

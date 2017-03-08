@@ -68,6 +68,9 @@ namespace matrix {
 		// Copies another matrix
 		Matrix(const Matrix&);
 	
+		// String initialiser
+		Matrix(const std::string&);
+
 		~Matrix();
 	
 		// Get number of rows
@@ -167,7 +170,7 @@ namespace matrix {
 	// STL style parser
 
 	template <class InputIterator>
-	matrix::Matrix parseMatrix(InputIterator start, InputIterator end) {
+	matrix::Matrix parseMatrix(InputIterator& start, const InputIterator& end) {
 		uint m = 0;
 		uint n = 0;
 		uint cn = 0;
@@ -178,8 +181,9 @@ namespace matrix {
 		std::vector<char> inp;
 		std::vector<double> mat;
 		
-		InputIterator i = start;
-		while (i != end) {
+		InputIterator& i = start;
+		bool cancel = false;
+		while (!(i == end || cancel)) {
 			switch (STATE) {
 			case VOID:
 				switch (*i) {
@@ -187,9 +191,16 @@ namespace matrix {
 				case '(':
 					STATE = CAPTURE;
 					break;
+				case ' ':
+				case '\n':
+				case '\t':
+				case '\v':
+				case '\f':
+				case '\r':
+					break;
 				default:
 					// Unexpected value
-					throw std::invalid_argument{"Unexpected character encountered"};
+					throw std::invalid_argument{"Unexpected character encountered: '" + *i + '"'};
 				}
 				break;
 			case CAPTURE:
@@ -212,7 +223,7 @@ namespace matrix {
 					n = cn;
 					cn = 0;
 					STATE = VOID;
-					i = end;
+					cancel = true;
 					break;
 				case ';':
 					inp.push_back('\0');

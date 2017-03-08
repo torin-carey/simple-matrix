@@ -9,11 +9,11 @@ int test_determinant(void) {
 	try {
 		Matrix M;
 	
-		M = Matrix{4, 4, {3,1,4,5,0,2,0,0,2,0,6,2,-1,-2,-3,0}};
+		M = Matrix{4, 4, {3,0,2,-1,1,2,0,-2,4,0,6,-3,5,0,2,0}};
 		if (M.det() != 20)
 			return false;
 
-		M = Matrix{3, 3, {1,0,0,2,-4,3,3,1,-1}};
+		M = Matrix{3, 3, {1,2,3,0,-4,1,0,3,-1}};
 		if (M.det() != 1)
 			return false;
 

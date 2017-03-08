@@ -14,6 +14,7 @@ int main() {
 		cout << "A =" << endl << input << endl;
 	} catch (invalid_argument& e) {
 		cerr << "Error: " << e.what() << endl;
+		return -1;
 	}
 	return 0;
 }

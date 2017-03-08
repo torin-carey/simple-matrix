@@ -9,7 +9,7 @@ int test_cofactor(void) {
 	try {
 		Matrix M;
 
-		M = Matrix{3, 3, {1,3,-1,4,0,9,7,5,11}};
+		M = Matrix{3, 3, {1,4,7,3,0,5,-1,9,11}};
 		if (M.cofactor(1, 2) != -13)
 			return false;
 
