@@ -4,14 +4,6 @@
 
 #include "matrix.hpp"
 
-#ifndef EPSILON
-// Error used for comparisons
-#define EPSILON 0.0000000001
-#endif
-#ifndef EQUAL
-#define EQUAL(a, b) (abs((a) - (b)) < EPSILON)
-#endif
-
 using namespace matrix;
 
 // BEGIN CLASS

@@ -6,8 +6,12 @@
 #include <vector>
 
 // Error used for comparisons
+#ifndef EPSILON
 #define EPSILON 0.0000000001
+#endif
+#ifndef EQUAL
 #define EQUAL(a, b) (abs((a) - (b)) < EPSILON)
+#endif
 
 namespace matrix {
 	struct bad_size : public std::exception {
