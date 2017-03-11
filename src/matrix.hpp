@@ -163,7 +163,9 @@ namespace matrix {
 	
 		// Operator Overloads
 		// ==================
-	
+
+		double& operator()(uint i, uint j);
+		double operator()(uint i, uint j) const;
 		Matrix& operator=(const Matrix&);
 		Matrix operator-();
 		Matrix& operator+=(const Matrix&);

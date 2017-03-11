@@ -68,9 +68,11 @@ Matrix::Matrix(const Matrix& mat) {
 }
 
 Matrix::Matrix(const std::string& matstr) {
+	m_ = 0;
+	n_ = 0;
+	buf_ = nullptr;
 	std::string::const_iterator start = matstr.cbegin();
 	std::string::const_iterator end;
-
 	*this = parseMatrix(start, end);
 }
 
@@ -324,12 +326,25 @@ Matrix Matrix::solve(const Matrix& ans) const {
 	return res;
 }
 
+double& Matrix::operator()(uint i, uint j) {
+	if (i >= m_ || j >= n_)
+		throw std::out_of_range("Term isn't within matrix");
+	return buf_[index(i, j)];
+}
+
+double Matrix::operator()(uint i, uint j) const {
+	if (i >= m_ || j >= n_)
+		throw std::out_of_range("Term isn't within matrix");
+	return buf_[index(i, j)];
+}
+
 Matrix& Matrix::operator=(const Matrix& a) {
 	if (this == &a)
 		return *this;
 	if (m_ != a.getM() || n_ != a.getN()) {
 		if (m_ == 0 || n_ == 0) {
-			delete[] buf_;
+			if (buf_ != nullptr)
+				delete[] buf_;
 		}
 		m_ = a.getM();
 		n_ = a.getN();
