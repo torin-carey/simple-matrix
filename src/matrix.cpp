@@ -1,6 +1,9 @@
 #include <iostream>
 #include <cmath>
 #include <climits>
+#include <algorithm>
+#include <exception>
+#include <stdexcept>
 
 #include "matrix.hpp"
 
@@ -12,65 +15,48 @@ using namespace matrix;
 #define check_size(mat) if (!((mat).m_ == m_ && (mat).n_ == n_)) throw bad_size();
 #define for_ij(m, n) for (uint i = 0; i < (m); i++) for (uint j = 0; j < (n); j++)
 
-Matrix::Matrix() {
-	m_ = 0;
-	n_ = 0;
-	buf_ = nullptr;
+//Matrix::Matrix() {
+//	m_ = 0;
+//	n_ = 0;
+//	buf_ = nullptr;
+//}
+
+Matrix::Matrix(uint rows, uint cols)
+		: m_{rows}, n_{cols}, buf_{(m_*n_==0) ? nullptr : new double[m_*n_]} {
+	std::fill(buf_, buf_ + (m_*n_), 0);
 }
 
-Matrix::Matrix(uint rows, uint cols) {
-	m_ = rows;
-	n_ = cols;
-	buf_ = new double[m_ * n_];
-	for (uint k = 0; k < (m_ * n_); k++)
-		buf_[k] = 0;
+Matrix::Matrix(uint rows, uint cols, std::initializer_list<double> list)
+		: m_{rows}, n_{cols}, buf_{(m_*n_==0) ? nullptr : new double[m_*n_]} {
+	if (list.size() != (m_*n_))
+		throw std::invalid_argument{"List must be of same size as matrix"};
+	std::copy(list.begin(), list.end(), buf_);
 }
 
-Matrix::Matrix(uint rows, uint cols, std::initializer_list<double> list) {
-	m_ = rows;
-	n_ = cols;
-	buf_ = new double[rows * cols];
-	const double *ptr = list.begin();
-	for (uint k = 0; (k < (rows * cols)) && (ptr != list.end()); k++)
-		buf_[k] = *ptr++;
+Matrix::Matrix(uint rows, uint cols, const double *values)
+		: m_{rows}, n_{cols}, buf_{(m_*n_==0) ? nullptr : new double[m_*n_]} {
+	std::copy((const double *)values, (const double *)(values + (m_*n_)), buf_);
 }
 
-Matrix::Matrix(uint rows, uint cols, double *values) {
-	m_ = rows;
-	n_ = cols;
-	buf_ = new double[m_ * n_];
-	for (int k = 0; k < (m_ * n_); k++)
-		buf_[k] = values[k];
+Matrix::Matrix(uint rows, uint cols, std::initializer_list<int> list)
+		: m_{rows}, n_{cols}, buf_{(m_*n_==0) ? nullptr : (new double[m_*n_])} {
+	if (list.size() != (m_*n_))
+		throw std::invalid_argument{"List must be of same size as matrix"};
+	std::copy(list.begin(), list.end(), buf_);
 }
 
-Matrix::Matrix(uint rows, uint cols, std::initializer_list<int> list) {
-	m_ = rows;
-	n_ = cols;
-	buf_ = new double[rows * cols];
-	const int *ptr = list.begin();
-	for (uint k = 0; (k < (rows * cols)) && (ptr != list.end()); k++)
-		buf_[k] = *ptr++;
+Matrix::Matrix(uint rows, uint cols, const int *values)
+		: m_{rows}, n_{cols}, buf_{(m_*n_==0) ? nullptr : new double[m_*n_]} {
+	std::copy((const int *)values, (const int *)(values + (m_*n_)), buf_);
 }
 
-Matrix::Matrix(uint rows, uint cols, int *values) {
-	m_ = rows;
-	n_ = cols;
-	buf_ = new double[m_ * n_];
-	for (int k = 0; k < (m_ * n_); k++)
-		buf_[k] = (double) values[k];
+Matrix::Matrix(const Matrix& mat)
+		: m_{mat.m_}, n_{mat.n_}, buf_{(m_*n_==0) ? nullptr : new double[m_*n_]} {
+	std::copy(mat.buf_, mat.buf_ + (m_*n_), buf_);
 }
 
-Matrix::Matrix(const Matrix& mat) {
-	m_ = mat.m_;
-	n_ = mat.n_;
-	buf_ = new double[m_ * n_];
-	(*this) = mat;
-}
-
-Matrix::Matrix(const std::string& matstr) {
-	m_ = 0;
-	n_ = 0;
-	buf_ = nullptr;
+Matrix::Matrix(const std::string& matstr)
+		: m_{0}, n_{0}, buf_{nullptr} {
 	std::string::const_iterator start = matstr.cbegin();
 	std::string::const_iterator end;
 	*this = parseMatrix(start, end);
@@ -326,6 +312,12 @@ Matrix Matrix::solve(const Matrix& ans) const {
 	return res;
 }
 
+void Matrix::swap(Matrix& other) {
+	std::swap(m_, other.m_);
+	std::swap(n_, other.n_);
+	std::swap(buf_, other.buf_);
+}
+
 double& Matrix::operator()(uint i, uint j) {
 	if (i >= m_ || j >= n_)
 		throw std::out_of_range("Term isn't within matrix");
@@ -338,20 +330,8 @@ double Matrix::operator()(uint i, uint j) const {
 	return buf_[index(i, j)];
 }
 
-Matrix& Matrix::operator=(const Matrix& a) {
-	if (this == &a)
-		return *this;
-	if (m_ != a.getM() || n_ != a.getN()) {
-		if (m_ == 0 || n_ == 0) {
-			if (buf_ != nullptr)
-				delete[] buf_;
-		}
-		m_ = a.getM();
-		n_ = a.getN();
-		buf_ = new double[m_ * n_];
-	}
-	for (uint k = 0; k < (m_ * n_); k++)
-		buf_[k] = a.buf_[k];
+Matrix& Matrix::operator=(Matrix a) {
+	this->swap(a);
 	return *this;
 }
 
@@ -393,7 +373,7 @@ bool Matrix::operator==(const Matrix& a) {
 	if (a.m_ != m_ || a.n_ != n_)
 		return false;
 	for (uint k = 0; k < (m_ * n_); k++)
-		if (abs(a.buf_[k] - buf_[k]) > EPSILON)
+		if (!EQUAL(a.buf_[k], buf_[k]))
 			return false;
 	return true;
 }

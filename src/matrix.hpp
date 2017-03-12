@@ -39,11 +39,11 @@ namespace matrix {
 	
 	class Matrix {
 	private:
-		// buf_ stores each term in the matrix
-		double *buf_;
 		// m_ and n_ store the number of rows
 		// and columns respectively.
 		uint m_, n_;
+		// buf_ stores each term in the matrix
+		double *buf_;
 		// Permutation functions, used for determintant calculation
 		static inline uint permutation_position(uint n, uint i, uint *p);
 		static void permutation_init(uint n, uint *p, uint *v);
@@ -53,7 +53,8 @@ namespace matrix {
 		// =====
 	
 		// Default constructor, creates empty matrix
-		Matrix();
+		Matrix()
+			: m_{0}, n_{0}, buf_{nullptr} {}
 	
 		// Creates an empty matrix
 		Matrix(uint rows, uint cols);
@@ -62,12 +63,12 @@ namespace matrix {
 		// Creates a matrix and fills vertically with
 		// values from values
 		Matrix(uint rows, uint cols, std::initializer_list<double>);
-		Matrix(uint rows, uint cols, double *values);
+		Matrix(uint rows, uint cols, const double *values);
 	
 		// Creates a matrix and fills vertically with
 		// integer values from values
 		Matrix(uint rows, uint cols, std::initializer_list<int>);
-		Matrix(uint rows, uint cols, int *values);
+		Matrix(uint rows, uint cols, const int *values);
 	
 		// Copies another matrix
 		Matrix(const Matrix&);
@@ -160,13 +161,15 @@ namespace matrix {
 		// TODO
 		/*// Performs Gaussian elimination
 		Matrix guassianEliminate() const;*/
-	
+		
+		void swap(Matrix& other);
+
 		// Operator Overloads
 		// ==================
 
 		double& operator()(uint i, uint j);
 		double operator()(uint i, uint j) const;
-		Matrix& operator=(const Matrix&);
+		Matrix& operator=(Matrix);
 		Matrix operator-();
 		Matrix& operator+=(const Matrix&);
 		Matrix& operator-=(const Matrix&);
