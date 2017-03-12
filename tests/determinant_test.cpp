@@ -8,7 +8,7 @@ using namespace matrix;
 int test_determinant(void) {
 	try {
 		Matrix M;
-	
+
 		M = Matrix{4, 4, {3,0,2,-1,1,2,0,-2,4,0,6,-3,5,0,2,0}};
 		if (M.det() != 20)
 			return false;

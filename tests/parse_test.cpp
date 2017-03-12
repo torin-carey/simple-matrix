@@ -8,7 +8,7 @@ using namespace matrix;
 int test_parse(void) {
 	try {
 		Matrix M = Matrix{4, 4, {1,2,3,4,2,2,2,4,4,5,6,4,7,8,9,4}};
-		
+
 		string str1 =	"[1,2,3,4;2,2,2,4;4,5,6,4;7,8,9,4]";
 		string str2 =	"[1,\t2\t,3,\t4;\n"
 				"2,\t2,\t2,\t4;\n"

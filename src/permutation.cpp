@@ -18,7 +18,7 @@ namespace matrix {
 				return j;
 		return 0;
 	}
-	
+
 	void Matrix::permutation_init(uint n, uint *p, uint *v) {
 		for (uint i = 0; i < n; i++) {
 			p[i] = i;
@@ -45,7 +45,7 @@ namespace matrix {
 			uint sp = v[pi] ? pi + 1 : pi - 1;
 			SWAP(p[pi], p[sp]);
 			SWAP(v[pi], v[sp]);
-	
+
 			// Flip directions of larger ints
 			for (uint j = i + 1; j < n; j++) {
 				pi = permutation_position(n, j, p);

@@ -15,12 +15,6 @@ using namespace matrix;
 #define check_size(mat) if (!((mat).m_ == m_ && (mat).n_ == n_)) throw bad_size();
 #define for_ij(m, n) for (uint i = 0; i < (m); i++) for (uint j = 0; j < (n); j++)
 
-//Matrix::Matrix() {
-//	m_ = 0;
-//	n_ = 0;
-//	buf_ = nullptr;
-//}
-
 Matrix::Matrix(uint rows, uint cols)
 		: m_{rows}, n_{cols}, buf_{(m_*n_==0) ? nullptr : new double[m_*n_]} {
 	std::fill(buf_, buf_ + (m_*n_), 0);
@@ -170,7 +164,7 @@ double Matrix::det() const {
 		throw bad_size();
 	if (m_ == 2) // Might as well speed things up
 		return (get(0, 0) * get(1, 1)) - (get(0, 1) * get(1, 0));
-	
+
 	uint p[n_], v[n_];
 	permutation_init(n_, p, v);
 	double detsum = 0, prod;
@@ -389,60 +383,58 @@ bool Matrix::operator!=(const Matrix& a) {
 // END CLASS
 
 namespace matrix {
-	
+
 	Matrix identityMatrix(uint m) {
 		Matrix mat(m, m);
 		for (uint k = 0; k < m; k++)
 			mat.set(k, k, 1);
 		return mat;
 	}
-	
+
 	std::ostream& operator<<(std::ostream& out, const Matrix& a) {
-		double val;
-		for (uint i = 0; i < a.getM(); i++) {
-			out << "|\t";
-			for (uint j = 0; j < a.getN(); j++) {
+		out << '[';
+		for (uint i = 0; i < a.getM(); ++i) {
+			if (i)
+				out << ";  ";
+			for (uint j = 0; j < a.getN(); ++j) {
 				if (j)
-					out << '\t';
-				val = a.get(i, j);
-				if (std::abs(val) < EPSILON)
-					val = 0;
-				out << val;
+					out << ',';
+				out << ' ' << a(i, j);
 			}
-			out << "\t|" << std::endl;
 		}
+		out << ' ' << ']';
 		return out;
 	}
-	
+
 	std::istream& operator>>(std::istream& in, Matrix& a) {
 		std::istream_iterator<char> start(in);
 		std::istream_iterator<char> end;
 		a = parseMatrix(start, end);
 		return in;
 	}
-	
+
 	Matrix operator+(const Matrix& a, const Matrix& b) {
 		Matrix mat(a);
 		mat += b;
 		return mat;
 	}
-	
+
 	Matrix operator-(const Matrix& a, const Matrix& b) {
 		Matrix mat(a);
 		mat -= b;
 		return mat;
 	}
-	
+
 	Matrix operator*(const Matrix& a, double b) {
 		Matrix mat(a);
 		mat *= b;
 		return mat;
 	}
-	
+
 	Matrix operator*(double a, const Matrix& b) {
 		return b * a;
 	}
-	
+
 	Matrix operator*(const Matrix& a, const Matrix& b) {
 		if (a.getN() != b.getM())
 			throw bad_size();
@@ -456,11 +448,11 @@ namespace matrix {
 		}
 		return mat;
 	}
-	
+
 	Matrix operator/(const Matrix& a, double b) {
 		Matrix mat(a);
 		mat /= b;
 		return mat;
 	}
-	
+
 }
