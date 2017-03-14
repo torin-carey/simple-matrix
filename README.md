@@ -45,9 +45,21 @@ Matrix B{3, 2, {1, 2, 3, 4, 5, 6}};
 std::cout << B << std::endl;
 ```
 ```
-|	1	2	|
-|	3	4	|
-|	5	6	|
+[ 1, 2;   3, 4;   5, 6 ]
+```
+This is formatted in such a way that it can be re-inputted into the matrix.
+
+We can also print the matrix in a more user friendly way
+```c++
+Matrix B{3, 2, {1, 2, 3, 4, 5, 6}};
+std::cout << B.pretty() << std::endl;
+```
+```
+┌─      ─┐
+│  1  2  │
+│  3  4  │
+│  5  6  │
+└─      ─┘
 ```
 
 ## Addition and Subtraction
@@ -163,7 +175,30 @@ double det = A.det();
 *Determinants are an extremely useful tool for dealing with matricies, if you would like to know about them, click [here](https://en.wikipedia.org/wiki/Determinant)*
 
 ## Transposition
-TODO
+The transpose operator is a simple operation that 'flips' the matrix over on its diagonal.
+Given a mxn matrix, a transposition would give an nxm matrix.
+
+### Example
+Consider a matrix object
+```c++
+Matrix mat{2, 3, {1, 2, 3, 4, 5, 6}};
+cout << mat.pretty() << endl;
+
+Matrix mat_t = mat.transpose();
+cout << mat_t.pretty() << endl;
+```
+Gives the output
+```
+┌─         ─┐
+│  1  2  3  │
+│  4  5  6  │
+└─         ─┘
+┌─      ─┐
+│  1  4  │
+│  2  5  │
+│  3  6  │
+└─      ─┘
+```
 
 ## Adjugates
 TODO
@@ -175,7 +210,37 @@ TODO
 TODO
 
 ## Inverting a matrix
-TODO
+With simple-matrix, a square matrix can be simply inverted with `Matrix::invert()`.
+
+### Example
+```c++
+Matrix mat{3, 3, {1, 2, 3, 4, 5, 6, 7, 8, 8}};
+cout << mat.pretty() << endl;
+
+Matrix mat_inv = mat.invert();
+cout << mat_inv.pretty() << endl;
+
+cout << (mat * mat_inv).pretty() << endl;
+```
+```
+┌─         ─┐
+│  1  2  3  │
+│  4  5  6  │
+│  7  8  8  │
+└─         ─┘
+┌─                              ─┐
+│  -2.66667   2.66667     -1     │
+│   3.33333  -4.33333      2     │
+│     -1         2        -1     │
+└─                              ─┘
+┌─         ─┐
+│  1  0  0  │
+│  0  1  0  │
+│  0  0  1  │
+└─         ─┘
+```
+
+Keep in mind that a matrix can only be inverted if it is square and if the determinant of the matrix is zero.
 
 ## Solving linear systems
 TODO
