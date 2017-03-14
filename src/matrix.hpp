@@ -59,13 +59,12 @@ namespace matrix {
 		// Creates an empty matrix
 		Matrix(uint rows, uint cols);
 
-
-		// Creates a matrix and fills vertically with
+		// Creates a matrix and fills horizontally with
 		// values from values
 		Matrix(uint rows, uint cols, std::initializer_list<double>);
 		Matrix(uint rows, uint cols, const double *values);
 
-		// Creates a matrix and fills vertically with
+		// Creates a matrix and fills horizontally with
 		// integer values from values
 		Matrix(uint rows, uint cols, std::initializer_list<int>);
 		Matrix(uint rows, uint cols, const int *values);
