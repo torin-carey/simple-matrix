@@ -20,7 +20,7 @@ int main() {
 			return -2;
 		}
 
-		cout << "A^-1 =" << endl << input.invert() << endl;
+		cout << "A^-1 =" << endl << input.invert().pretty() << endl;
 	} catch (invalid_argument& e) {
 		cerr << "Error: " << e.what() << endl;
 		return -1;

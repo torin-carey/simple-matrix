@@ -7,7 +7,7 @@ CFLAGS=-O3 -I$(SRC) -g
 
 DEPS=$(SRC)/matrix.hpp
 
-OBJ=matrix.o permutation.o
+OBJ=matrix.o permutation.o prettyprint.o
 LIBRARY=libsimplematrix.a
 
 TESTS=./tests
@@ -23,7 +23,7 @@ all: $(LIBRARY) test.out examples
 
 test: test.out
 
-examples: $(EXAMPLE)/Makefile
+examples: $(EXAMPLE)/Makefile $(LIBRARY)
 	@$(MAKE) -C $(EXAMPLE)
 
 install: $(LIBRARY)

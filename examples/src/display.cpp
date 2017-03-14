@@ -11,7 +11,7 @@ int main() {
 		cout << "A = ";
 		cin >> input;
 
-		cout << "A =" << endl << input << endl;
+		cout << "A =" << endl << input.pretty() << endl;
 	} catch (invalid_argument& e) {
 		cerr << "Error: " << e.what() << endl;
 		return -1;

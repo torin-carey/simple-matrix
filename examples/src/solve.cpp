@@ -20,7 +20,7 @@ int main() {
 
 		Matrix sol = coeff.solve(ans);
 
-		cout << endl << "Solutions:" << endl << sol << endl;
+		cout << endl << "Solutions:" << endl << sol.pretty() << endl;
 	} catch (const not_square&) {
 		cerr << "Error: Coefficient matrix must be square" << endl;
 		return -1;

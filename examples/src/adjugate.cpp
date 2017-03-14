@@ -16,7 +16,7 @@ int main() {
 			return -1;
 		}
 
-		cout << "adj A =" << endl << input.adj() << endl;
+		cout << "adj A =" << endl << input.adj().pretty() << endl;
 	} catch (invalid_argument& e) {
 		cerr << "Error: " << e.what() << endl;
 		return -1;

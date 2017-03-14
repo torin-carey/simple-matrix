@@ -77,6 +77,9 @@ namespace matrix {
 
 		~Matrix();
 
+		// Pretty prints the matrix
+		std::string pretty() const;
+
 		// Get number of rows
 		uint getM() const;
 
