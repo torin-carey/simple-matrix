@@ -198,6 +198,14 @@ namespace matrix {
 	Matrix operator*(double, const Matrix&);
 	Matrix operator*(const Matrix&, const Matrix&);
 	Matrix operator/(const Matrix&, double);
+	
+	// Transformations in 2D
+	namespace transform2d {	
+		Matrix rotate(double theta);
+		Matrix stretch(double xfactor, double yfactor);
+		Matrix shear(double xslant, double yslant);
+		Matrix reflect(double theta);
+	}
 
 	// STL style parser
 

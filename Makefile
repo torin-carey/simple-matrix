@@ -7,7 +7,7 @@ CFLAGS=-O3 -I$(SRC) -g
 
 DEPS=$(SRC)/matrix.hpp
 
-OBJ=matrix.o permutation.o prettyprint.o
+OBJ=matrix.o permutation.o prettyprint.o transformations.o
 LIBRARY=libsimplematrix.a
 
 TESTS=./tests
