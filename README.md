@@ -240,7 +240,7 @@ cout << (mat * mat_inv).pretty() << endl;
 └─         ─┘
 ```
 
-Keep in mind that a matrix can only be inverted if it is square and if the determinant of the matrix is zero.
+Keep in mind that a matrix can only be inverted if it is square and if the determinant of the matrix is not zero.
 
 ## Solving linear systems
 TODO
