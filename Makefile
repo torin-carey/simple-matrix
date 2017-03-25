@@ -48,7 +48,7 @@ test.out: $(addprefix $(BIN)/, $(TESTOBJ)) $(LIBRARY)
 .PHONY: library all test examples install clean reset
 
 clean:
-	rmdir -rf $(BIN)
+	rm -rf $(BIN)
 
 reset: clean
 	rm -f $(LIBRARY) test.out
