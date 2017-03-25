@@ -12,7 +12,7 @@ LIBRARY=libsimplematrix.a
 
 TESTS=./tests
 TESTOBJ =main_test.o determinant_test.o 
-TESTOBJ+=minor_test.o  cofactor_test.o
+TESTOBJ+=minor_test.o cofactor_test.o
 TESTOBJ+=inverse_test.o parse_test.o
 
 EXAMPLE=./examples
@@ -48,9 +48,7 @@ test.out: $(addprefix $(BIN)/, $(TESTOBJ)) $(LIBRARY)
 .PHONY: library all test examples install clean reset
 
 clean:
-	rm -f $(addprefix $(BIN)/, $(OBJ))
-	rm -f $(addprefix $(BIN)/, $(TESTOBJ))
-	rmdir $(BIN)
+	rmdir -rf $(BIN)
 
 reset: clean
 	rm -f $(LIBRARY) test.out

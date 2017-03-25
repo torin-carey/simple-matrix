@@ -3,7 +3,7 @@ CFLAGS=-I../src -L.. -lsimplematrix
 
 SRC=./src
 
-EXAMPLES=display.out determinant.out adjugate.out inverse.out solve.out
+EXAMPLES=display.out determinant.out adjugate.out inverse.out solve.out product.out
 
 all: ../libsimplematrix.a $(EXAMPLES)
 
