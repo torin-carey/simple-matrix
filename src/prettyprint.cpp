@@ -9,6 +9,9 @@
 using namespace matrix;
 
 std::string Matrix::pretty() const {
+	if (isEmpty()) {
+		return std::string("Empty");
+	}
 	std::ostringstream osstr, main;
 	std::vector<std::string> strs;
 	uint mwidth = 0;

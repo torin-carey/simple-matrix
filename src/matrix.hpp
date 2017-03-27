@@ -69,8 +69,11 @@ namespace matrix {
 		Matrix(uint rows, uint cols, std::initializer_list<int>);
 		Matrix(uint rows, uint cols, const int *values);
 
-		// Copies another matrix
+		// Copy constructor
 		Matrix(const Matrix&);
+		
+		// Move constructor
+		Matrix(Matrix&&);
 
 		// String initialiser
 		Matrix(const std::string&);
@@ -171,7 +174,8 @@ namespace matrix {
 
 		double& operator()(uint i, uint j);
 		double operator()(uint i, uint j) const;
-		Matrix& operator=(Matrix);
+		Matrix& operator=(const Matrix&); // Copy assignment
+		Matrix& operator=(Matrix&&); // Move assignment
 		Matrix operator-();
 		Matrix& operator+=(const Matrix&);
 		Matrix& operator-=(const Matrix&);

@@ -49,6 +49,13 @@ Matrix::Matrix(const Matrix& mat)
 	std::copy(mat.buf_, mat.buf_ + (m_*n_), buf_);
 }
 
+Matrix::Matrix(Matrix&& mat)
+		: m_{0}, n_{0}, buf_{nullptr} {
+	std::swap(m_, mat.m_);
+	std::swap(n_, mat.n_);
+	std::swap(buf_, mat.buf_);
+}
+
 Matrix::Matrix(const std::string& matstr)
 		: m_{0}, n_{0}, buf_{nullptr} {
 	std::string::const_iterator start = matstr.cbegin();
@@ -57,8 +64,7 @@ Matrix::Matrix(const std::string& matstr)
 }
 
 Matrix::~Matrix() {
-	if (buf_ != nullptr)
-		delete[] buf_;
+	delete[] buf_;
 }
 
 uint Matrix::getM() const {
@@ -324,7 +330,13 @@ double Matrix::operator()(uint i, uint j) const {
 	return buf_[index(i, j)];
 }
 
-Matrix& Matrix::operator=(Matrix a) {
+Matrix& Matrix::operator=(const Matrix& a) {
+	Matrix tmp(a);
+	this->swap(tmp);
+	return *this;
+}
+
+Matrix& Matrix::operator=(Matrix&& a) {
 	this->swap(a);
 	return *this;
 }
