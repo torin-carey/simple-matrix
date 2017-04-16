@@ -3,11 +3,11 @@
 #include "matrix.hpp"
 
 using namespace std;
-using namespace matrix;
+using namespace simple_matrix;
 
 int main() {
 	try {
-		Matrix input;
+		matrix input;
 		cout << "A = ";
 		cin >> input;
 

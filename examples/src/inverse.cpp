@@ -3,19 +3,19 @@
 #include "matrix.hpp"
 
 using namespace std;
-using namespace matrix;
+using namespace simple_matrix;
 
 int main() {
 	try {
-		Matrix input;
+		matrix input;
 		cout << "A = ";
 		cin >> input;
 
-		if (!input.isSquare()) {
+		if (!input.is_square()) {
 			cerr << "Error: Matrix must be square" << endl;
 			return -1;
 		}
-		if (!input.isInvertible()) {
+		if (!input.is_invertible()) {
 			cerr << "Error: Matrix is not invertable" << endl;
 			return -2;
 		}

@@ -5,17 +5,17 @@
 #include "matrix.hpp"
 
 using namespace std;
-using namespace matrix;
+using namespace simple_matrix;
 
 int main() {
 	try {
-		Matrix prod;
-		Matrix inp;
+		matrix prod;
+		matrix inp;
 	
 		cin >> inp;
-		while (!inp.isEmpty()) {
-			if (prod.isEmpty())
-				prod = identityMatrix(inp.getN());
+		while (!inp.is_empty()) {
+			if (prod.is_empty())
+				prod = identity_matrix(inp.n());
 			prod *= inp;
 			cin >> inp;
 		}

@@ -4,18 +4,18 @@
 #include "matrix.hpp"
 
 using namespace std;
-using namespace matrix;
+using namespace simple_matrix;
 
 int test_determinant(void) {
 	try {
-		Matrix M;
+		matrix M;
 		int det, comp;
 		
 		ifstream in("tests/determinants.txt");
 		
 		while (true) {
 			in >> M;
-			if (M.isEmpty())
+			if (M.is_empty())
 				break;
 			in >> det;
 			comp = M.det();
