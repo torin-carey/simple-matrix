@@ -13,20 +13,20 @@
 #define EQUAL(a, b) (abs((a) - (b)) < EPSILON)
 #endif
 
-namespace matrix {
+namespace simple_matrix {
 	struct bad_size : public std::exception {
 		virtual const char *what() const throw() {
-			return "Matrix/matricies not compatible sizes";
+			return "matrix/matricies not compatible sizes";
 		}
 	};
 	struct not_square : public bad_size {
 		const char *what() const throw() {
-			return "Matrix must be square";
+			return "matrix must be square";
 		}
 	};
 	struct not_invertible : public std::exception {
 		const char *what() const throw() {
-			return "Matrix is not invertible";
+			return "matrix is not invertible";
 		}
 	};
 	struct not_solvable : public std::exception {
@@ -37,7 +37,7 @@ namespace matrix {
 
 	typedef unsigned int uint;
 
-	class Matrix {
+	class matrix {
 	private:
 		// m_ and n_ store the number of rows
 		// and columns respectively.
@@ -53,41 +53,41 @@ namespace matrix {
 		// =====
 
 		// Default constructor, creates empty matrix
-		Matrix()
+		matrix()
 			: m_{0}, n_{0}, buf_{nullptr} {}
 
 		// Creates an empty matrix
-		Matrix(uint rows, uint cols);
+		matrix(uint rows, uint cols);
 
 		// Creates a matrix and fills horizontally with
 		// values from values
-		Matrix(uint rows, uint cols, std::initializer_list<double>);
-		Matrix(uint rows, uint cols, const double *values);
+		matrix(uint rows, uint cols, std::initializer_list<double>);
+		matrix(uint rows, uint cols, const double *values);
 
 		// Creates a matrix and fills horizontally with
 		// integer values from values
-		Matrix(uint rows, uint cols, std::initializer_list<int>);
-		Matrix(uint rows, uint cols, const int *values);
+		matrix(uint rows, uint cols, std::initializer_list<int>);
+		matrix(uint rows, uint cols, const int *values);
 
 		// Copy constructor
-		Matrix(const Matrix&);
+		matrix(const matrix&);
 		
 		// Move constructor
-		Matrix(Matrix&&);
+		matrix(matrix&&);
 
 		// String initialiser
-		Matrix(const std::string&);
+		matrix(const std::string&);
 
-		~Matrix();
+		~matrix();
 
 		// Pretty prints the matrix
 		std::string pretty() const;
 
 		// Get number of rows
-		uint getM() const;
+		uint m() const;
 
 		// Get number of columns
-		uint getN() const;
+		uint n() const;
 
 		// Gets the M_ij element
 		double get(uint i, uint j) const;
@@ -97,35 +97,35 @@ namespace matrix {
 
 		// Returns true if either m or n are zero, useful
 		// for returning an undefined value
-		bool isEmpty() const;
+		bool is_empty() const;
 
 		// Returns true if matrix is a square matrix
-		bool isSquare() const;
+		bool is_square() const;
 
 		// Returns true if matrix is a diagonal matrix
-		bool isDiagonal() const;
+		bool is_diagonal() const;
 
 		// Returns true if matrix is an upper triangular matrix
-		bool isUpperTriangular() const;
+		bool is_upper_triangular() const;
 
 		// Returns true if matrix is a lower triangular matrix
-		bool isLowerTriangular() const;
+		bool is_lower_triangular() const;
 
 		// Returns true if matrix is invertible
 		// that is, M.det() != 0
-		bool isInvertible() const;
+		bool is_invertible() const;
 
 		// Gets the ith row as a row vector
-		Matrix getRow(uint i) const;
+		matrix get_row(uint i) const;
 
 		// Gets the jth col as a column vector
-		Matrix getCol(uint j) const;
+		matrix get_col(uint j) const;
 
 		// Replaces ith row with a row vector
-		void setRow(uint i, const Matrix& row);
+		void set_row(uint i, const matrix& row);
 
 		// Replaces jth col with a column vector
-		void setCol(uint j, const Matrix& col);
+		void set_col(uint j, const matrix& col);
 
 		// Advanced
 		// ========
@@ -137,13 +137,13 @@ namespace matrix {
 		double det() const;
 
 		// Transposes matrix
-		Matrix transpose() const;
+		matrix transpose() const;
 
 		// Adjugates matrix
-		Matrix adj() const;
+		matrix adj() const;
 
 		// Creates a sub matrix, excluding row i and col j
-		Matrix submatrix(uint i, uint j) const;
+		matrix submatrix(uint i, uint j) const;
 
 		// Calculates minor M_ij
 		double minordet(uint i, uint j) const;
@@ -152,61 +152,59 @@ namespace matrix {
 		double cofactor(uint i, uint j) const;
 
 		// Creates a matrix of minors
-		Matrix minorMatrix() const;
+		matrix minor_matrix() const;
 
 		// Creates a matrix of cofactors
-		Matrix cofactorMatrix() const;
+		matrix cofactor_matrix() const;
 
 		// Inverts a square matrix
-		Matrix invert() const;
+		matrix invert() const;
 
 		// Solves a system of equations in a square matrix
-		Matrix solve(const Matrix& ans) const;
+		matrix solve(const matrix& ans) const;
 
-		// TODO
-		/*// Performs Gaussian elimination
-		Matrix guassianEliminate() const;*/
-
-		void swap(Matrix& other);
+		void swap(matrix& other);
 
 		// Operator Overloads
 		// ==================
 
+		// Element access operators
 		double& operator()(uint i, uint j);
 		double operator()(uint i, uint j) const;
-		Matrix& operator=(const Matrix&); // Copy assignment
-		Matrix& operator=(Matrix&&); // Move assignment
-		Matrix operator-();
-		Matrix& operator+=(const Matrix&);
-		Matrix& operator-=(const Matrix&);
-		Matrix& operator*=(const Matrix&);
-		Matrix& operator*=(double);
-		Matrix& operator/=(double);
-		bool operator==(const Matrix&);
-		bool operator!=(const Matrix&);
 
-		friend std::ostream& operator<<(std::ostream& out, const Matrix& a);
+		matrix& operator=(const matrix&); // Copy assignment
+		matrix& operator=(matrix&&); // Move assignment
+		matrix operator-();
+		matrix& operator+=(const matrix&);
+		matrix& operator-=(const matrix&);
+		matrix& operator*=(const matrix&);
+		matrix& operator*=(double);
+		matrix& operator/=(double);
+		bool operator==(const matrix&);
+		bool operator!=(const matrix&);
+
+		friend std::ostream& operator<<(std::ostream& out, const matrix& a);
 	};
 
 	// 0x0 matrix
-	const Matrix EMPTY_MATRIX;
+	const matrix EMPTY_MATRIX;
 
 	// Creates an identity matrix with the given size
-	Matrix identityMatrix(uint m);
+	matrix identity_matrix(uint m);
 
-	std::ostream& operator<<(std::ostream&, const Matrix&);
-	std::istream& operator>>(std::istream&, Matrix&);
-	Matrix operator+(const Matrix&, const Matrix&);
-	Matrix operator-(const Matrix&, const Matrix&);
-	Matrix operator*(const Matrix&, double);
-	Matrix operator*(double, const Matrix&);
-	Matrix operator*(const Matrix&, const Matrix&);
-	Matrix operator/(const Matrix&, double);
+	std::ostream& operator<<(std::ostream&, const matrix&);
+	std::istream& operator>>(std::istream&, matrix&);
+	matrix operator+(const matrix&, const matrix&);
+	matrix operator-(const matrix&, const matrix&);
+	matrix operator*(const matrix&, double);
+	matrix operator*(double, const matrix&);
+	matrix operator*(const matrix&, const matrix&);
+	matrix operator/(const matrix&, double);
 
 	// STL style parser
 
 	template <class InputIterator>
-	matrix::Matrix parseMatrix(InputIterator& start, const InputIterator& end) {
+	simple_matrix::matrix parse_matrix(InputIterator& start, const InputIterator& end) {
 		uint m = 0;
 		uint n = 0;
 		uint cn = 0;
@@ -284,7 +282,7 @@ namespace matrix {
 		if (STATE == CAPTURE) {
 			throw std::invalid_argument{"Premature end"};
 		}
-		Matrix M{m, n};
+		matrix M{m, n};
 		for (uint i = 0; i < m; i++)
 		for (uint j = 0; j < n; j++) {
 			M.set(i, j, mat[j + (i * n)]);

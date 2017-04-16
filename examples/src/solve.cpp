@@ -3,22 +3,22 @@
 #include "matrix.hpp"
 
 using namespace std;
-using namespace matrix;
+using namespace simple_matrix;
 
 int main() {
 	try {
-		Matrix coeff, ans;
+		matrix coeff, ans;
 		cout << "Enter nxn coefficient matrix: ";
 		cin >> coeff;
 		cout << "Enter nx1 answer matrix: ";
 		cin >> ans;
 		
-		if (ans.getM() == 1 && ans.getN() == coeff.getN()) {
+		if (ans.m() == 1 && ans.n() == coeff.n()) {
 			// Supplied row vector instead of column vector
 			ans = ans.transpose();
 		}
 
-		Matrix sol = coeff.solve(ans);
+		matrix sol = coeff.solve(ans);
 
 		cout << endl << "Solutions:" << endl << sol.pretty() << endl;
 	} catch (const not_square&) {

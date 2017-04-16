@@ -11,22 +11,22 @@ permutations as indexes for the matrix.
 #include "matrix.hpp"
 #define SWAP(a, b) tmp=(a); (a)=(b); (b)=tmp
 
-namespace matrix {
-	inline uint Matrix::permutation_position(uint n, uint i, uint *p) {
+namespace simple_matrix {
+	inline uint matrix::permutation_position(uint n, uint i, uint *p) {
 		for (uint j = 0; j < n; j++)
 			if (p[j] == i)
 				return j;
 		return 0;
 	}
 
-	void Matrix::permutation_init(uint n, uint *p, uint *v) {
+	void matrix::permutation_init(uint n, uint *p, uint *v) {
 		for (uint i = 0; i < n; i++) {
 			p[i] = i;
 			v[i] = 0;
 		}
 	}
 
-	int Matrix::permutation_permute(uint n, uint *p, uint *v) {
+	int matrix::permutation_permute(uint n, uint *p, uint *v) {
 		uint i = n;
 		while (i) {
 			--i;

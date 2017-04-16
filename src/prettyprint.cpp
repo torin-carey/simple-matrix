@@ -6,10 +6,10 @@
 
 #include "matrix.hpp"
 
-using namespace matrix;
+using namespace simple_matrix;
 
-std::string Matrix::pretty() const {
-	if (isEmpty()) {
+std::string matrix::pretty() const {
+	if (is_empty()) {
 		return std::string("Empty");
 	}
 	std::ostringstream osstr, main;
