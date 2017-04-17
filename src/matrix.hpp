@@ -49,6 +49,9 @@ namespace simple_matrix {
 		static void permutation_init(uint n, uint *p, uint *v);
 		static int permutation_permute(uint n, uint *p, uint *v);
 	public:
+		typedef double* iterator;
+		typedef const double* const_iterator;
+
 		// Basic
 		// =====
 
@@ -94,6 +97,22 @@ namespace simple_matrix {
 
 		// Sets the M_ij element
 		void set(uint i, uint j, double value);
+
+		iterator begin() {
+			return &buf_[0];
+		}
+
+		iterator end() {
+			return &buf_[m_ * n_];
+		}
+
+		const_iterator cbegin() const {
+			return &buf_[0];
+		}
+
+		const_iterator cend() const {
+			return &buf_[m_ * n_];
+		}
 
 		// Returns true if either m or n are zero, useful
 		// for returning an undefined value
